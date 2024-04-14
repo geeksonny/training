@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.bg-dark {
+    --bs-bg-opacity: 1;
+    background-color: white !important;
+}
+.login-container {
+    height: 65vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.my-5 {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+}
+
+.fw-bolder {
+    font-weight: bolder !important;
+    color: #212529;
+    margin-bottom: 5px;
+}
+
+.text-white-50 {
+    --bs-text-opacity: 1;
+    color: dimgray !important;;
+}
+
+#loginForm {
+    margin: auto;
+    height: 430px;
+    width: 350px;
+    background-color: #EEEFF1;
+    border-radius: 5px;
+    text-align: center;
+    padding: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: none;
+}
+
+h1{
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+h4{
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+.in-1 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.in-2 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#btn {
+    background-color: rgba(0, 0, 0, 255);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    grid-template-columns: 10% 50%;
+
+}
+
+.checkbox-container label {
+    margin-left: 10px;
+}
+
+
+.site-btn btn-lg w-100{
+    background-color: rgba(0, 0, 0, 255);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+
+#msg {
+    height: 20px;
+    text-align:center;
+    font-size:16px;
+    color:red;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
