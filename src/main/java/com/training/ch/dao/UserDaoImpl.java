@@ -60,7 +60,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public String pwdSearch(User user) throws Exception{
-        return session.selectOne(namespace+"pwdSearch"+user);
+        return session.selectOne(namespace+"pwdSearch", user);
     }
 
     @Override
