@@ -4,6 +4,7 @@ package com.training.ch.controller;
 import com.training.ch.domain.User;
 import com.training.ch.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,8 @@ import java.net.URLEncoder;
 public class LoginController {
     @Autowired
     UserServiceImpl userService;
-
+    @Autowired
+    private BCryptPasswordEncoder bcryptPasswordEncoder;
 
     @GetMapping("/login")
     public String loginForm(){
@@ -78,7 +80,6 @@ public class LoginController {
     @PostMapping("/idSearchPro")
     public String loginSearchIdPro(User user) throws Exception {
         String result = userService.idSearch(user);
-        System.out.println("result = " + result);
         if(result==null){
             return "no";
         }else{
@@ -91,10 +92,11 @@ public class LoginController {
         return "member/searchPwd";
     }
 
+
+    @ResponseBody
     @PostMapping("/pwdSearchPro")
     public String searchPwdPro(User user) throws Exception {
         String result = userService.pwdSearch(user);
-        System.out.println("result = " + result);
         if(result==null){
             return "no";
         }else{
@@ -102,17 +104,34 @@ public class LoginController {
         }
     }
 
+    @ResponseBody
+    @PostMapping("/pwdModifyPro")
+    public String pwdModifyPro(User user) throws Exception{
+        user.setPwd(bcryptPasswordEncoder.encode(user.getPwd()));
+        int rowCnt = userService.pwdMod(user);
+        if(rowCnt!=1){
+            throw new Exception("PWD_MOD Error");
+        }else{
+            return "PWD_MOD OK";
+        }
+    }
+
+
+
+
+
     private boolean loginCheck(String id, String pwd) {
         User user = null;
 
         try {
             user = userService.selectUser(id);
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
 
-        return user!=null && user.getPwd().equals(pwd);
+        return user!=null && bcryptPasswordEncoder.matches(pwd, user.getPwd());
     }
 
 }

@@ -6,12 +6,100 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/login.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>비밀번호 찾기</title>
-<%--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>--%>
+    <script type="text/javascript">
+        // 비밀번호 찾기 및 재설정
+        $(document).ready(function(){
+            $('#btn').click(function(){
+                // 입력 필드에서 ID와 이메일 가져오기
+                var id = $('#id').val();
+                var email = $('#email').val();
+                // ID나 이메일이 비어 있는지 확인
+                if (id === "" || email === "") {
+                    $('#msg').html('ID와 이메일을 모두 입력하세요.');
+                    return; // ID나 이메일이 비어 있으면 함수 종료
+                }
 
+                // 비밀번호 찾기 AJAX 요청
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/login/pwdSearchPro',
+                    type: 'POST',
+                    data: {'id': id, 'email': email},
+                    success: function(rdata) {
+                        if (rdata === "no") { // 아이디 없음
+                            $('#msg').html('일치하는 계정이 없습니다.');
+                        } else { // 아이디 있음
+                            // 모달 폼에 값 채워넣기
+                            $('#currentPwd').val(rdata); // 현재 비밀번호 설정
+                            $('#userId').val(id); // ID 설정
+                            $('#userEmail').val(email); // 이메일 설정
+                            // 모달 열기
+                            $('#resetPwdModal').modal('show');
+                        }
+                    },
+                    error: function() {
+                        $('#msg').html('비밀번호 찾기 중 오류가 발생했습니다.');
+                    }
+                });
+
+                // 모달창 닫힐때 처리
+                $('#resetPwdModal').on('hidden.bs.modal', function () {
+                    // 새 비밀번호 입력 필드 초기화
+                    $('#newPwd, #confirmPassword').val('');
+                    // 비밀번호 일치 메시지 제거
+                    $('#resetPwdMsg').html('');
+                });
+
+                $('#newPwd, #confirmPassword').keyup(function() {
+                    var newPwd = $('#newPwd').val();
+                    var confirmPassword = $('#confirmPassword').val();
+                    if (newPwd == "" && confirmPassword == "") {
+                        $('#resetPwdMsg').html('새 비밀번호를 입력하세요.');
+                        return; // 새 비밀번호가 공백으로 넘어가면 함수 종료
+                    }
+                    if (newPwd == confirmPassword) {
+                        // 비밀번호가 일치할 때, 초록색으로 메시지 표시
+                        $('#resetPwdMsg').html('<div class="alert alert-success" role="alert">비밀번호가 일치합니다.</div>');
+                    } else {
+                        // 비밀번호가 일치하지 않을 때, 메시지 제거
+                        $('#resetPwdMsg').html('<div class="alert alert-danger" role="alert">비밀번호가 일치하지 않습니다.</div>');
+                    }
+                });
+
+            // 비밀번호 재설정 처리
+            $('#resetPwdBtn').click(function(){
+                var newPwd = $('#newPwd').val();
+                var confirmPassword = $('#confirmPassword').val();
+
+                // 새 비밀번호 공백 리턴
+                if (newPwd == "" || confirmPassword == "") {
+                    $('#resetPwdMsg').html('<div class="alert alert-danger" role="alert">새 비밀번호를 입력하세요.</div>');
+                    return; // 새 비밀번호가 공백으로 넘어가면 함수 종료
+                }
+
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/login/pwdModifyPro',
+                    type: 'POST',
+                    data: {'id' : id, 'email' : email, 'pwd' : newPwd},
+                    success: function(response){
+                        $('#resetPwdMsg').html(response);
+                        // 선택적으로, 비밀번호 재설정 후 모달을 닫을 수 있습니다.
+                        $('#resetPwdModal').modal('hide');
+                        window.location.href = '${pageContext.request.contextPath}/login/login';
+                    }, error : function () {
+                        $('#newPwd, #confirmPassword').val('');
+                        $('#resetPwdMsg').html('<div class="alert alert-danger" role="alert">새 비밀번호를 입력하세요.</div>');
+                    }
+                });
+            });
+        });
+
+    });
+    </script>
     <style>
         a:link, a:visited  {
             text-decoration: none;
@@ -87,22 +175,24 @@
         </div>
     </div>
 </div>
-
-
 <!-- HTML 코드에 다음 모달 섹션을 추가합니다 -->
-<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+<div class="modal fade" id="resetPwdModal" tabindex="-1" aria-labelledby="resetPwdModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="resetPasswordModalLabel">비밀번호 재설정</h5>
+                <h5 class="modal-title" id="resetPwdModalLabel">비밀번호 재설정</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <!-- 비밀번호 재설정 폼 -->
-                <form id="resetPasswordForm">
+            <form id="resetPwdForm">
+                <div class="modal-body">
+                    <!-- 비밀번호 재설정 폼 -->
                     <div class="mb-3">
-                        <label for="newPassword" class="form-label">새 비밀번호</label>
-                        <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+                        <label for="currentPwd" class="form-label">현재 비밀번호</label>
+                        <input type="password" class="form-control" id="currentPwd" name="currentPwd" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPwd" class="form-label">새 비밀번호</label>
+                        <input type="password" class="form-control" id="newPwd" name="newPwd" required>
                     </div>
                     <div class="mb-3">
                         <label for="confirmPassword" class="form-label">새 비밀번호 확인</label>
@@ -111,79 +201,16 @@
                     <!-- 필요한 경우 추가 필드를 입력합니다 -->
                     <input type="hidden" id="userId" name="userId">
                     <input type="hidden" id="userEmail" name="userEmail">
-                    <div id="resetPasswordMsg"></div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary" id="resetPasswordBtn">비밀번호 재설정</button>
-            </div>
+                    <div id="resetPwdMsg"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="button" class="btn btn-primary" id="resetPwdBtn">비밀번호 재설정</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-
-
 </body>
-<script type="text/javascript">
-
-    // 비밀번호 찾기 및 재설정
-    $(document).ready(function(){
-        $('#btn').click(function(){
-            // 입력 필드에서 ID와 이메일 가져오기
-            var id = $('#id').val();
-            var email = $('#email').val();
-            // ID나 이메일이 비어 있는지 확인
-            if (id === "" || email === "") {
-                $('#msg').html('ID와 이메일을 모두 입력하세요.');
-                return; // ID나 이메일이 비어 있으면 함수 종료
-            }
-
-            // 비밀번호 찾기 AJAX 요청
-            $.ajax({
-                url: '${pageContext.request.contextPath}/login/pwdSearchPro',
-                type: 'POST',
-                data: {'id': id, 'email': email},
-                success: function(rdata) {
-                    if (rdata === "no") { // 아이디 없음
-                        $('#msg').html('일치하는 계정이 없습니다.');
-                    } else { // 아이디 있음
-                        alert(rdata);
-                        // 모달 폼에 ID와 이메일 설정
-                        $('#userId').val(id);
-                        $('#userEmail').val(email);
-                        // 모달 열기
-                        $('#resetPasswordModal').modal('show');
-                    }
-                },
-                error: function() {
-                    $('#msg').html('비밀번호 찾기 중 오류가 발생했습니다.');
-                }
-            });
-        });
-
-    // 비밀번호 재설정 처리
-        $('#resetPasswordBtn').click(function(){
-            var newPassword = $('#newPassword').val();
-            var confirmPassword = $('#confirmPassword').val();
-            // 비밀번호 확인
-            if (newPassword !== confirmPassword) {
-                $('#resetPasswordMsg').html('<div class="alert alert-danger" role="alert">비밀번호가 일치하지 않습니다.</div>');
-                return; // 비밀번호가 일치하지 않으면 함수 종료
-            }
-            // 비밀번호가 일치하면 재설정 요청 전송
-            $.ajax({
-                url: '${pageContext.request.contextPath}/login/resetPassword',
-                type: 'POST',
-                data: $('#resetPasswordForm').serialize(),
-                success: function(response){
-                    $('#resetPasswordMsg').html(response);
-                    // 선택적으로, 비밀번호 재설정 후 모달을 닫을 수 있습니다.
-                    $('#resetPasswordModal').modal('hide');
-                }
-            });
-        });
-
-    });
-</script>
 </html>

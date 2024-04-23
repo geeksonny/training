@@ -55,10 +55,11 @@
     </select>
 
     <!-- 유저 비밀번호 수정-->
-    <update id="pwdMod">
+    <update id="pwdMod" parameterType="User">
         UPDATE USER_INFO
            SET PWD = #{pwd}
          WHERE ID = #{id}
+           AND EMAIL = #{email}
     </update>
 
 

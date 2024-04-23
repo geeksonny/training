@@ -16,10 +16,17 @@
         // 아이디 찾기
         $(document).ready(function(){
             $('#btn').click(function(){
+                var name = $('#name').val();
+                var email = $('#email').val();
+                if (name === "" || email === "") {
+                    $('#msg').html('이름과 이메일을 모두 입력하세요.');
+                    $('#msg').css('color', 'red');
+                    return;
+                }
                 $.ajax({
                     url:'${pageContext.request.contextPath }/login/idSearchPro',
                     type:'POST',
-                    data:{'name':$('#name').val(),'email':$('#email').val()},
+                    data:{'name': name,'email': email},
                     success:function(rdata){
                         var result="";
                         if(rdata=="no"){	// 아이디 없음
