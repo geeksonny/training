@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/login.css">
     <meta charset="UTF-8">
-    <title>Login Form</title>
+    <title>Login</title>
     <style>
         a:link, a:visited  {
             text-decoration: none;
