@@ -23,6 +23,12 @@
         WHERE ID = #{id}
     </select>
 
+    <!-- 유저 email 중복 조회   -->
+    <select id="checkUserEmail" resultType="User">
+        <include refid="selectAll"/>
+        WHERE EMAIL = #{email}
+    </select>
+
 
     <!-- 유저 정보 입력 -->
     <insert id="insertUser">
@@ -72,6 +78,7 @@
                BIRTH= #{birth}
          WHERE ID = #{id}
     </update>
+
 
 
     <!-- 전체 회원 정보 조회-->

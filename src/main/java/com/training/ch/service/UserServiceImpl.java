@@ -44,5 +44,8 @@ public class UserServiceImpl implements UserService {
         return userDao.pwdMod(user);
     }
 
-
+    @Override
+    public User checkUserEmail(String email) throws Exception {
+        return userDao.checkUserEmail(email);
+    }
 }

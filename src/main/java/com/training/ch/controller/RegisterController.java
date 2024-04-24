@@ -22,12 +22,6 @@ public class RegisterController {
     private BCryptPasswordEncoder bcryptPasswordEncoder;
 
 
-
-    @GetMapping("/test")
-    public String test(){
-        return "member/insertTest";
-    }
-
     @GetMapping("/add")
     public String register(){
         return "member/registerForm";
@@ -42,7 +36,7 @@ public class RegisterController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "index";
+            return "redirect:/register/add";
         }
     }
 

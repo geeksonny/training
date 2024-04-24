@@ -68,7 +68,10 @@ public class UserDaoImpl implements UserDao {
         return session.update(namespace+"pwdMod", user);
     }
 
-
+    @Override
+    public User checkUserEmail(String email) throws Exception{
+        return session.selectOne(namespace+"checkUserEmail", email);
+    }
 }
 
 

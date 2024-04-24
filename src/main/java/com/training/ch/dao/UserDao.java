@@ -25,4 +25,6 @@ public interface UserDao {
     String pwdSearch(User user) throws Exception;
 
     int pwdMod(User user) throws Exception;
+
+    User checkUserEmail(String email) throws Exception;
 }
