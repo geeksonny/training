@@ -14,12 +14,12 @@ public class ReserveDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     Date endTime;   // 예약 종료 시간
     int use_cnt;     // 이용횟수
-    String reserve_state; // 예약상태
+    int reserve_state; // 예약상태
 
 
     public ReserveDto(){}
 
-    public ReserveDto(int rno, String id, String type, Date startTime, Date endTime, int use_cnt, String reserve_state) {
+    public ReserveDto(int rno, String id, String type, Date startTime, Date endTime, int use_cnt, int reserve_state) {
         this.rno = rno;
         this.id = id;
         this.type = type;
@@ -103,11 +103,11 @@ public class ReserveDto {
         this.use_cnt = use_cnt;
     }
 
-    public String getReserve_state() {
+    public int getReserve_state() {
         return reserve_state;
     }
 
-    public void setReserve_state(String reserve_state) {
+    public void setReserve_state(int reserve_state) {
         this.reserve_state = reserve_state;
     }
 }

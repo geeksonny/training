@@ -5,7 +5,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class ReserveDaoImpl implements ReserveDao {
@@ -39,6 +41,12 @@ public class ReserveDaoImpl implements ReserveDao {
     }
 
     @Override
-    public int increaseUseCnt
+    public int cancelUseCnt(int rno, String type, int reserve_state) throws Exception{
+        Map map = new HashMap();
+        map.put("rno", rno);
+        map.put("type", type);
+        map.put("reserve_state", reserve_state);
+        return session.update(namespace+"cancelUseCnt", map);
+    }
 
 }

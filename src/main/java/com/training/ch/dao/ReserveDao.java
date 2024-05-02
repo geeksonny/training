@@ -15,4 +15,5 @@ public interface ReserveDao {
 
     List<ReserveDto> selectReserveIdAll(String id) throws Exception;
 
+    int cancelUseCnt(int rno, String type, int reserve_state) throws Exception;
 }
