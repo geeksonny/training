@@ -7,6 +7,7 @@
         <typeAlias alias="User" type="com.training.ch.domain.User"/>
         <typeAlias alias="BoardDto" type="com.training.ch.domain.BoardDto"/>
         <typeAlias alias="ReserveDto" type="com.training.ch.domain.ReserveDto"/>
+        <typeAlias alias="EquipmentDto" type="com.training.ch.domain.EquipmentDto"/>
         <typeAlias alias="SearchCondition" type="com.training.ch.domain.SearchCondition"/>
         <typeAlias alias="CommentDto" type="com.training.ch.domain.CommentDto"/>
     </typeAliases>

@@ -6,15 +6,17 @@ import java.util.Date;
 import java.util.Objects;
 
 public class ReserveDto {
-    int rno;        // 예약번호
-    String id;      // 사용자
-    String type;    // 기구 종류
+    private int rno;        // 예약번호
+    private String id;      // 사용자
+    private String type;    // 기구 종류
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    Date startTime; // 예약 시작 시간
+    private Date startTime; // 예약 시작 시간
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    Date endTime;   // 예약 종료 시간
-    int use_cnt;     // 이용횟수
-    int reserve_state; // 예약상태
+    private Date endTime;   // 예약 종료 시간
+
+    private int use_cnt;     // 이용횟수
+    private int reserve_state; // 0: 예약완료 1: 예약취소 2:사용완료
 
 
     public ReserveDto(){}

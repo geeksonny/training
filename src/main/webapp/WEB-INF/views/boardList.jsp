@@ -190,6 +190,7 @@
     </c:forEach>
 </table>
 <br>
+<div class="search-form text-center">
 <form action="<c:url value="/board/list"/>" method="get">
     <select name="option">
         <option value="A" ${ph.sc.option=='A' || ph.sc.option=='' ? "selected" : ""}>제목+내용</option>
@@ -201,24 +202,8 @@
     <input type="submit" value="검색">
 </form>
 <br>
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
-    </ul>
-</nav>
-<div class="paging-container">
+</div>
+<div class="paging-container text-center">
     <div class="paging">
         <c:if test="${ph.totalCnt==null || ph.totalCnt==0}">
             <div> 게시물이 없습니다. </div>

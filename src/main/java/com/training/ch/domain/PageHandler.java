@@ -19,7 +19,6 @@ public class PageHandler {
     public PageHandler(int totalCnt, SearchCondition sc){
         this.totalCnt=totalCnt;
         this.sc=sc;
-
         doPaging(totalCnt, sc);
     }
 

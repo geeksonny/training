@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.training.ch.dao.equipMapper">
+
+    <sql id="selectAll">
+        SELECT ENO, ENAME, ECATEGORY, EMAINIMG, ESUBIMG, ESTATE
+          FROM EQUIPMENT
+    </sql>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM EQUIPMENT
+    </select>
+
+
+    <delete id="deleteAll">
+        DELETE FROM EQUIPMENT
+    </delete>
+
+    <select id="selectEquipListAll" resultType="EquipmentDto">
+        <include refid="selectAll"/>
+
+    </select>
+
+
+
+    <sql id="searchCondition">
+        <choose>
+            <when test='option=="T"'>
+                AND title LIKE concat('%', #{keyword}, '%')
+            </when>
+            <when test='option=="W"'>
+                AND writer LIKE concat('%', #{keyword}, '%')
+            </when>
+            <otherwise>
+                AND (title   LIKE concat('%', #{keyword}, '%')
+                OR   content LIKE concat('%', #{keyword}, '%'))
+            </otherwise>
+        </choose>
+    </sql>
+
+    <select id="searchSelectPage" parameterType="SearchCondition" resultType="EquipmentDto">
+        SELECT ENO, ENAME, ECATEGORY, EMAINIMG, ESUBIMG, ESTATE
+        FROM  EQUIPMENT
+<!--        WHERE true-->
+<!--        <include refid="searchCondition"/>-->
+        ORDER BY ENO ASC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
+        SELECT count(*)
+        FROM  EQUIPMENT
+<!--        WHERE true-->
+<!--        <include refid="searchCondition"/>-->
+    </select>
+
+</mapper>

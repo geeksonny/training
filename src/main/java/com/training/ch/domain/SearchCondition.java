@@ -25,6 +25,7 @@ public class SearchCondition {
                 .queryParam("keyword", keyword)
                 .build().toString();
     }
+
     public String getQueryString(){
         return getQueryString(page);
     }
