@@ -21,7 +21,7 @@
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="<c:url value='/'/>" class="nav-link px-2 text-secondary">Home</a></li>
-                <li><a href="<c:url value='/reserve/reserve'/>" class="nav-link px-2 text-secondary">Reservation</a></li>
+                <li><a href="<c:url value='/reserve/list'/>" class="nav-link px-2 text-secondary">Reservation</a></li>
                 <li><a href="<c:url value='/board/list'/>" class="nav-link px-2 text-white">Board</a></li>
                 <li><a href="#" class="nav-link px-2 text-white">Q&A</a></li>
             </ul>

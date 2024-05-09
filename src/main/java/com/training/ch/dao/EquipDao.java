@@ -13,4 +13,6 @@ public interface EquipDao {
     int searchResultCnt(SearchCondition sc) throws Exception;
 
     List<EquipmentDto> searchSelectPage(SearchCondition sc) throws Exception;
+
+    EquipmentDto select(int eno) throws Exception;
 }

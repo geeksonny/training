@@ -156,6 +156,15 @@
         .btn-write:hover {
             text-decoration: underline;
         }
+        .fixed-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 20px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
     </style>
     <title>Title</title>
 </head>
@@ -221,7 +230,10 @@
         </c:if>
     </div>
 </div>
-
-<jsp:include page="inc/footer.jsp"/>
+<!-- Fixed footer -->
+<footer class="fixed-footer">
+    <jsp:include page="inc/footer.jsp"/>
+</footer>
+<!-- Fixed footer end -->
 </body>
 </html>

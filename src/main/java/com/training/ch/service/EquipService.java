@@ -13,4 +13,6 @@ public interface EquipService {
     int getSearchResultCnt(SearchCondition sc) throws Exception;
 
     List<EquipmentDto> getSearchResultPage(SearchCondition sc) throws Exception;
+
+    EquipmentDto select(int eno) throws Exception;
 }

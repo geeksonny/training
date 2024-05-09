@@ -40,6 +40,7 @@
     </select>
 
 
+    <!-- 예약 취소 -->
     <update id="cancelUseCnt" parameterType="map">
         UPDATE RESERVE_INFO
         SET    USE_CNT = USE_CNT - 1, RESERVE_STATE = #{reserve_state}
@@ -50,25 +51,17 @@
 
      <!-- 유저 정보 입력 -->
     <insert id="insertReserve">
-        INSERT INTO RESERVE_INFO(RNO, ID, TYPE, STRAT_TIME, END_TIME, USE_CNT, RESERVE_STATE)
+        INSERT INTO RESERVE_INFO(RNO, ID, TYPE, START_TIME, END_TIME, USE_CNT, RESERVE_STATE)
         VALUES((SELECT rno
                 FROM (SELECT IFNULL(MAX(rno), 0) + 1 AS rno
                       FROM RESERVE_INFO) as A),
                #{id}, #{type}, #{start_time}, #{end_time},
                (SELECT use_cnt
-                FROM (SELECT IF(COUNT(*) >=1, MAX(use_cnt) +1, 0) AS use_cnt
+                FROM (SELECT IF(COUNT(*) >=1, MAX(use_cnt) +1, 1) AS use_cnt
                       FROM RESERVE_INFO
                       WHERE type= #{type}) as B),
                #{reserve_state})
     </insert>
-
-
-
-    <update id="updateCommentCnt" parameterType="map">
-        UPDATE board
-        SET   comment_cnt = comment_cnt + #{cnt}
-        WHERE bno = #{bno}
-    </update>
 
 
 </mapper>

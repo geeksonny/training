@@ -35,4 +35,9 @@ public class EquipDaoImpl implements EquipDao {
         return session.selectList(namespace+"searchSelectPage", sc);
     }
 
+    @Override
+    public EquipmentDto select(int eno) throws Exception {
+        return session.selectOne(namespace+"select", eno);
+    }
+
 }

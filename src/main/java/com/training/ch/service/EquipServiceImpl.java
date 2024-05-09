@@ -37,7 +37,8 @@ public class EquipServiceImpl implements EquipService {
         return equipDao.searchSelectPage(sc);
     }
 
-
-
-
+    @Override
+    public EquipmentDto select(int eno) throws Exception {
+        return equipDao.select(eno);
+    }
 }

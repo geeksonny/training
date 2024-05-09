@@ -11,25 +11,13 @@ public class ReserveDto {
     private String type;    // 기구 종류
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date startTime; // 예약 시작 시간
+    private Date start_time; // 예약 시작 시간
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    private Date endTime;   // 예약 종료 시간
+    private Date end_time;   // 예약 종료 시간
 
     private int use_cnt;     // 이용횟수
     private int reserve_state; // 0: 예약완료 1: 예약취소 2:사용완료
-
-
-    public ReserveDto(){}
-
-    public ReserveDto(int rno, String id, String type, Date startTime, Date endTime, int use_cnt, int reserve_state) {
-        this.rno = rno;
-        this.id = id;
-        this.type = type;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.use_cnt = use_cnt;
-        this.reserve_state = reserve_state;
-    }
 
     @Override
     public String toString() {
@@ -37,11 +25,22 @@ public class ReserveDto {
                 "rno=" + rno +
                 ", id='" + id + '\'' +
                 ", type='" + type + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
+                ", start_time=" + start_time +
+                ", end_time=" + end_time +
                 ", use_cnt=" + use_cnt +
-                ", reserve_state='" + reserve_state + '\'' +
+                ", reserve_state=" + reserve_state +
                 '}';
+    }
+
+    public ReserveDto(){}
+    public ReserveDto(int rno, String id, String type, Date start_time, Date end_time, int use_cnt, int reserve_state) {
+        this.rno = rno;
+        this.id = id;
+        this.type = type;
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.use_cnt = use_cnt;
+        this.reserve_state = reserve_state;
     }
 
     @Override
@@ -49,12 +48,12 @@ public class ReserveDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReserveDto that = (ReserveDto) o;
-        return rno == that.rno && use_cnt == that.use_cnt && Objects.equals(id, that.id) && Objects.equals(type, that.type) && Objects.equals(startTime, that.startTime) && Objects.equals(endTime, that.endTime) && Objects.equals(reserve_state, that.reserve_state);
+        return rno == that.rno && use_cnt == that.use_cnt && reserve_state == that.reserve_state && Objects.equals(id, that.id) && Objects.equals(type, that.type) && Objects.equals(start_time, that.start_time) && Objects.equals(end_time, that.end_time);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rno, id, type, startTime, endTime, use_cnt, reserve_state);
+        return Objects.hash(rno, id, type, start_time, end_time, use_cnt, reserve_state);
     }
 
     public int getRno() {
@@ -81,27 +80,27 @@ public class ReserveDto {
         this.type = type;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public Date getStart_time() {
+        return start_time;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
+    public void setStart_time(Date start_time) {
+        this.start_time = start_time;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public Date getEnd_time() {
+        return end_time;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setEnd_time(Date end_time) {
+        this.end_time = end_time;
     }
 
     public int getUse_cnt() {
         return use_cnt;
     }
 
-    public void setUse_cnt(int useCnt) {
+    public void setUse_cnt(int use_cnt) {
         this.use_cnt = use_cnt;
     }
 
@@ -112,4 +111,6 @@ public class ReserveDto {
     public void setReserve_state(int reserve_state) {
         this.reserve_state = reserve_state;
     }
+
+
 }
