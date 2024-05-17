@@ -37,4 +37,13 @@ public class ReserveServiceImpl implements ReserveService {
         return reserveDao.cancelUseCnt(rno, type, reserve_state);
     }
 
+    @Override
+    public int isAlreadyReserved(ReserveDto reserveDto) throws Exception {
+        return reserveDao.isAlreadyReserved(reserveDto);
+    }
+
+    @Override
+    public int otherReserved(ReserveDto reserveDto) throws Exception {
+        return reserveDao.otherReserved(reserveDto);
+    }
 }

@@ -49,4 +49,14 @@ public class ReserveDaoImpl implements ReserveDao {
         return session.update(namespace+"cancelUseCnt", map);
     }
 
+    @Override
+    public int isAlreadyReserved(ReserveDto reserveDto) throws Exception{
+        return session.selectOne(namespace+"isAlreadyReserved", reserveDto);
+    }
+
+    @Override
+    public int otherReserved(ReserveDto reserveDto) throws Exception{
+        return session.selectOne(namespace+"otherReserved", reserveDto);
+    }
+
 }

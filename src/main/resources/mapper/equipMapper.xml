@@ -21,12 +21,25 @@
         <include refid="selectAll"/>
     </select>
 
+
+
+
+    <select id="selectEquipCategory"  parameterType="map" resultType="EquipmentDto">
+        <include refid="selectAll"/>
+        WHERE ECATEGORY = #{eCategory}
+        ORDER BY ENO ASC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+
+
+
+
+
     <select id="select" parameterType="int" resultType="EquipmentDto">
         <include refid="selectAll" />
         WHERE ENO = #{eno}
     </select>
-
-
 
     <select id="searchSelectPage" parameterType="SearchCondition" resultType="EquipmentDto">
         SELECT ENO, ENAME, ECATEGORY, EMAINIMG, ESUBIMG, ESTATE
@@ -40,10 +53,13 @@
     <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
         SELECT count(*)
         FROM  EQUIPMENT
-<!--        WHERE true-->
-<!--        <include refid="searchCondition"/>-->
     </select>
 
+    <select id="getResultCnt" parameterType="SearchCondition" resultType="int">
+        SELECT count(*)
+        FROM  EQUIPMENT
+        WHERE ECATEGORY = #{eCategory}
+    </select>
 
     <sql id="searchCondition">
         <choose>

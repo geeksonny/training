@@ -12,7 +12,7 @@
         SELECT COUNT(*) FROM RESERVE_INFO
     </select>
 
-    <!-- 유저 정보 전체 삭제    -->
+    <!-- 유저 예약내역 전체 삭제    -->
     <delete id="deleteAll">
         DELETE FROM RESERVE_INFO
     </delete>
@@ -25,7 +25,7 @@
         LIMIT 1
     </select>
 
-    <!-- 유저 예약내역 전체 조회-->
+    <!-- 유저당 예약내역 전체 조회-->
     <select id="selectReserveIdAll" resultType="User">
         <include refid="selectAll"/>
         WHERE ID = #{id}
@@ -48,6 +48,24 @@
         and TYPE = #{type}
     </update>
 
+    <!-- 예약조건 조회  -->
+    <select id="isAlreadyReserved" parameterType="ReserveDto" resultType="int">
+        SELECT COUNT(*)
+        FROM RESERVE_INFO
+        WHERE TYPE = #{type}
+        AND <![CDATA[start_time < #{end_time} AND end_time > #{start_time}]]>
+    </select>
+
+    <select id="otherReserved" parameterType="ReserveDto" resultType="int">
+        SELECT COUNT(*)
+        FROM RESERVE_INFO
+        WHERE ID = #{id}
+          AND <![CDATA[start_time < #{end_time} AND end_time > #{start_time}]]>
+    </select>
+
+
+
+
 
      <!-- 유저 정보 입력 -->
     <insert id="insertReserve">
@@ -59,7 +77,8 @@
                (SELECT use_cnt
                 FROM (SELECT IF(COUNT(*) >=1, MAX(use_cnt) +1, 1) AS use_cnt
                       FROM RESERVE_INFO
-                      WHERE type= #{type}) as B),
+                      WHERE type= #{type}
+                        AND ID = #{id}) as B),
                #{reserve_state})
     </insert>
 

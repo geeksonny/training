@@ -1,6 +1,5 @@
 package com.training.ch.controller;
 
-import com.training.ch.dao.BoardDao;
 import com.training.ch.domain.BoardDto;
 import com.training.ch.domain.PageHandler;
 import com.training.ch.domain.SearchCondition;

@@ -4,7 +4,43 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
     <title>Title</title>
+    <script>
+        let msg = "${msg}";
+        if(msg=="RESERVE_OK")    alert("성공적으로 예약하셨습니다.");
+
+        let selectedCategory = null;
+
+        $(document).ready(function() {
+            $('#upperBody, #lowerBody, #breath').click(function() {
+                selectedCategory = $(this).val();
+                loadEquipmentsByCategory(selectedCategory);
+            });
+
+            $('#all').click(function() {
+                selectedCategory = null;
+                loadAllEquipments();
+            });
+
+        });
+
+        // 카테고리에 따른 기구 목록을 불러오는 함수
+        function loadEquipmentsByCategory(eCategory) {
+            let pageUrl = '${pageContext.request.contextPath}/reserve/equipments?eCategory=' + eCategory;
+            // 페이지 이동
+            window.location.href = pageUrl;
+
+        }
+
+        // 모든 기구 목록을 불러오는 함수
+        function loadAllEquipments() {
+            let pageUrl = '${pageContext.request.contextPath}/reserve/list';
+            window.location.href = pageUrl;
+
+        }
+
+    </script>
     <style>
         .shop__sidebar__categories ul {
             padding: 0;
@@ -38,8 +74,8 @@
         }
         .card-img-top {
             width: 100%;
-            height: 400px; /* 이미지 높이를 조절할 수 있습니다. 필요에 따라 변경할 수 있습니다. */
-            object-fit: contain; /* 이미지를 카드 영역에 꽉 차도록 채웁니다. */
+            height: 400px;
+            object-fit: contain;
         }
 
         .card-heading a:hover {
@@ -49,7 +85,6 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            /*width: 250px;*/
         }
 
         .card-body {
@@ -60,6 +95,23 @@
             flex-shrink: 0;
         }
 
+        .category-button {
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+        }
+
+        .category-button:hover {
+            background-color: #e9ecef;
+        }
 
         .fixed-sidebar {
             position: fixed;
@@ -108,9 +160,10 @@
     <div class="shop__sidebar">
         <div class="shop__sidebar__search">
             <form>
-            <input type="text" id="keyword" name="keyword"  placeholder="검색어를 입력하세요.">
-            <button type="submit" id="submit" class="search">
-                <span class="icon_search"></span>Search</button>
+                <input type="text" id="keyword" name="keyword"  placeholder="검색어를 입력하세요.">
+                <button type="submit" id="submit" class="search">
+                    <span class="icon_search"></span>검색
+                </button>
             </form>
         </div>
         <div class="shop__sidebar__accordion">
@@ -118,15 +171,15 @@
                 <!-- 카테고리 시작 -->
                 <div class="card">
                     <div class="card-heading">
-                        <a data-toggle="collapse" data-target="#collapseOne">전체</a>
+                        <button id="all" class="category-button">전체</button>
                     </div>
                     <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
                         <div class="card-body">
                             <div class="shop__sidebar__categories">
                                 <ul class="nice-scroll">
-                                    <li><a href="#" id="upperBody" >상체</a></li>
-                                    <li><a href="#" id="lowerBody" >하체</a></li>
-                                    <li><a href="#" id="breath" >유산소</a></li>
+                                    <li><button id="upperBody" value="0" class="category-button">상체</button></li>
+                                    <li><button id="lowerBody" value="1" class="category-button">하체</button></li>
+                                    <li><button id="breath" value="2" class="category-button">유산소</button></li>
                                 </ul>
                             </div>
                         </div>
@@ -201,7 +254,6 @@
     </div>
     <!-- Paging container end -->
 </div>
-<!-- Main content end -->
 
 <!-- Fixed footer -->
 <footer class="fixed-footer">

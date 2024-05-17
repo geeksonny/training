@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/login.css">
     <meta charset="UTF-8">
     <title>Login</title>
+    <script>
+        let msg = "${msg}";
+        if(msg=="RESERVE_ERR")  alert("로그인해주세요.");
+
+    </script>
     <style>
         a:link, a:visited  {
             text-decoration: none;

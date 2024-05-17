@@ -41,4 +41,14 @@ public class EquipServiceImpl implements EquipService {
     public EquipmentDto select(int eno) throws Exception {
         return equipDao.select(eno);
     }
+
+    @Override
+    public List<EquipmentDto> selectEquipCategory(int eCategory, SearchCondition sc) throws Exception {
+        return equipDao.selectEquipCategory(eCategory, sc);
+    }
+
+    @Override
+    public int getResultCnt(int eCategory) throws Exception {
+        return equipDao.getResultCnt(eCategory);
+    }
 }
