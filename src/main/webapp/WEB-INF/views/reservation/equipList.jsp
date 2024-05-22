@@ -13,11 +13,13 @@
         let selectedCategory = null;
 
         $(document).ready(function() {
+            // 각 카테고리 버튼에 대한 클릭 이벤트 처리
             $('#upperBody, #lowerBody, #breath').click(function() {
                 selectedCategory = $(this).val();
-                loadEquipmentsByCategory(selectedCategory);
+                loadEquipmentsByCategory(selectedCategory); // 해당 카테고리에 맞는 기구 목록을 불러오는 함수 호출
             });
 
+            // 전체 버튼에 대한 클릭 이벤트 처리
             $('#all').click(function() {
                 selectedCategory = null;
                 loadAllEquipments();
@@ -25,19 +27,18 @@
 
         });
 
+
         // 카테고리에 따른 기구 목록을 불러오는 함수
         function loadEquipmentsByCategory(eCategory) {
             let pageUrl = '${pageContext.request.contextPath}/reserve/equipments?eCategory=' + eCategory;
             // 페이지 이동
             window.location.href = pageUrl;
-
         }
 
         // 모든 기구 목록을 불러오는 함수
         function loadAllEquipments() {
             let pageUrl = '${pageContext.request.contextPath}/reserve/list';
             window.location.href = pageUrl;
-
         }
 
     </script>
@@ -131,6 +132,7 @@
             margin-bottom: 100px;
         }
 
+
     </style>
 </head>
 <body>
@@ -149,7 +151,7 @@
 <aside class="fixed-sidebar">
     <div class="shop__sidebar">
         <div class="shop__sidebar__search">
-            <form action="${pageContext.request.contextPath}/reserve/list" method="get">
+            <form>
                 <input type="text" id="keyword" name="keyword"  placeholder="검색어를 입력하세요.">
                 <button type="submit" id="submit" class="search">
                     <span class="icon_search"></span>검색
@@ -187,7 +189,6 @@
     <section>
         <div class="container px-4 px-lg-5">
             <div class="row gx-5 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <%--   운동기구 목록 리스트  --%>
                 <c:forEach var="list" items="${list}" >
                     <div class="col mb-5">
                         <div class="card h-100">
@@ -217,12 +218,9 @@
                         </div>
                     </div>
                 </c:forEach>
-
             </div>
         </div>
     </section>
-    <!-- Section end -->
-
     <!-- Paging container -->
     <div class="paging-container text-center">
         <div class="paging">
@@ -231,21 +229,19 @@
             </c:if>
             <c:if test="${ph.totalCnt!=null && ph.totalCnt!=0}">
                 <c:if test="${ph.showPrev}">
-                    <a class="page" href="<c:url value="/reserve/list${ph.sc.getQueryString(ph.beginPage-1)}"/>">&lt;</a>
+                    <%--                <a class="page" href="<c:url value="/reserve/equipments${ph.sc.getQueryString(ph.beginPage-1)}"/>">&lt;</a>--%>
+                    <a class="page" href="<c:url value="/reserve/equipments?page=${ph.sc.beginPage-1}&pageSize=${ph.sc.pageSize}&eCategory=${eCategory}"/>">&lt;</a>
                 </c:if>
                 <c:forEach var="i" begin="${ph.beginPage}" end="${ph.endPage}">
-                    <a class="page ${i==ph.sc.page? "paging-active" : ""}" href="<c:url value="/reserve/list${ph.sc.getQueryString(i)}"/>">${i}</a>
+                    <a class="page ${i==ph.sc.page? "paging-active" : ""}" href="<c:url value="/reserve/equipments?page=${i}&pageSize=${ph.sc.pageSize}&eCategory=${eCategory}"/>">${i}</a>
                 </c:forEach>
                 <c:if test="${ph.showNext}">
-                    <a class="page" href="<c:url value="/reserve/list${ph.sc.getQueryString(ph.endPage+1)}"/>">&gt;</a>
+                    <a class="page" href="<c:url value="/reserve/equipments?page=${ph.sc.ph.endPage+1}&pageSize=${ph.sc.pageSize}&eCategory=${eCategory}"/>">&gt;</a>
                 </c:if>
             </c:if>
         </div>
     </div>
-    <!-- Paging container end -->
 </div>
-
-
 
 </body>
 </html>

@@ -13,7 +13,6 @@
     <script>
         let msg = "${msg}";
         if(msg=="RESERVE_ERR")  alert("로그인해주세요.");
-
     </script>
     <style>
         a:link, a:visited  {

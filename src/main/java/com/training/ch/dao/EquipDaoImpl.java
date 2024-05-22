@@ -18,21 +18,6 @@ public class EquipDaoImpl implements EquipDao {
     private static String namespace ="com.training.ch.dao.equipMapper.";
 
     @Override
-    public int getCount() throws Exception{
-        return session.selectOne(namespace+"getCount");
-    }
-
-    @Override
-    public List<EquipmentDto> selectEquipListAll() throws Exception{
-        return session.selectList(namespace+"selectEquipListAll");
-    }
-
-    @Override
-    public int searchResultCnt(SearchCondition sc) throws Exception {
-        return session.selectOne(namespace+"searchResultCnt", sc);
-    }
-
-    @Override
     public List<EquipmentDto> searchSelectPage(SearchCondition sc) throws Exception {
         return session.selectList(namespace+"searchSelectPage", sc);
     }
@@ -55,4 +40,16 @@ public class EquipDaoImpl implements EquipDao {
     public int getResultCnt(int eCategory) throws Exception {
         return session.selectOne(namespace+"getResultCnt", eCategory);
     }
+
+    @Override
+    public int getSearchResultCnt(SearchCondition sc) throws Exception{
+        return session.selectOne(namespace+"getSearchResultCnt", sc);
+
+    }
+
+    @Override
+    public List<EquipmentDto> getSearchResultPage(SearchCondition sc) throws Exception{
+        return session.selectList(namespace+"getSearchResultPage", sc);
+    }
+
 }

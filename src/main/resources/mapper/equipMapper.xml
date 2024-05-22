@@ -8,32 +8,12 @@
           FROM EQUIPMENT
     </sql>
 
-    <select id="count" resultType="int">
-        SELECT COUNT(*) FROM EQUIPMENT
-    </select>
-
-
-    <delete id="deleteAll">
-        DELETE FROM EQUIPMENT
-    </delete>
-
-    <select id="selectEquipListAll" resultType="EquipmentDto">
-        <include refid="selectAll"/>
-    </select>
-
-
-
-
     <select id="selectEquipCategory"  parameterType="map" resultType="EquipmentDto">
         <include refid="selectAll"/>
         WHERE ECATEGORY = #{eCategory}
         ORDER BY ENO ASC
         LIMIT #{offset}, #{pageSize}
     </select>
-
-
-
-
 
 
     <select id="select" parameterType="int" resultType="EquipmentDto">
@@ -44,36 +24,30 @@
     <select id="searchSelectPage" parameterType="SearchCondition" resultType="EquipmentDto">
         SELECT ENO, ENAME, ECATEGORY, EMAINIMG, ESUBIMG, ESTATE
         FROM  EQUIPMENT
-<!--        WHERE true-->
-<!--        <include refid="searchCondition"/>-->
         ORDER BY ENO ASC
         LIMIT #{offset}, #{pageSize}
     </select>
 
-    <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
-        SELECT count(*)
-        FROM  EQUIPMENT
-    </select>
-
-    <select id="getResultCnt" parameterType="SearchCondition" resultType="int">
+    <select id="getResultCnt" resultType="int">
         SELECT count(*)
         FROM  EQUIPMENT
         WHERE ECATEGORY = #{eCategory}
     </select>
 
-    <sql id="searchCondition">
-        <choose>
-            <when test='option=="T"'>
-                AND title LIKE concat('%', #{keyword}, '%')
-            </when>
-            <when test='option=="W"'>
-                AND writer LIKE concat('%', #{keyword}, '%')
-            </when>
-            <otherwise>
-                AND (title   LIKE concat('%', #{keyword}, '%')
-                OR   content LIKE concat('%', #{keyword}, '%'))
-            </otherwise>
-        </choose>
-    </sql>
+    <select id="getSearchResultCnt" parameterType="SearchCondition" resultType="int">
+        SELECT COUNT(*)
+        FROM EQUIPMENT
+        WHERE TRUE
+        AND ENAME LIKE concat('%', #{keyword}, '%')
+    </select>
+
+    <select id="getSearchResultPage" parameterType="SearchCondition" resultType="EquipmentDto">
+        <include refid="selectAll"/>
+        WHERE TRUE
+        AND ENAME LIKE concat('%', #{keyword}, '%')
+        ORDER BY ENO ASC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
 
 </mapper>

@@ -15,25 +15,8 @@ public class EquipServiceImpl implements EquipService {
     @Autowired
     EquipDao equipDao;
 
-
     @Override
-    public int getCount() throws Exception{
-        return equipDao.getCount();
-    }
-
-    @Override
-    public List<EquipmentDto> selectEquipListAll() throws Exception{
-        return equipDao.selectEquipListAll();
-    }
-
-
-    @Override
-    public int getSearchResultCnt(SearchCondition sc) throws Exception {
-        return equipDao.searchResultCnt(sc);
-    }
-
-    @Override
-    public List<EquipmentDto> getSearchResultPage(SearchCondition sc) throws Exception {
+    public List<EquipmentDto> getResultPage(SearchCondition sc) throws Exception {
         return equipDao.searchSelectPage(sc);
     }
 
@@ -51,4 +34,16 @@ public class EquipServiceImpl implements EquipService {
     public int getResultCnt(int eCategory) throws Exception {
         return equipDao.getResultCnt(eCategory);
     }
+
+    @Override
+    public int getSearchResultCnt(SearchCondition sc) throws Exception {
+        return equipDao.getSearchResultCnt(sc);
+    }
+
+    @Override
+    public List<EquipmentDto> getSearchResultPage(SearchCondition sc) throws Exception{
+        return equipDao.getSearchResultPage(sc);
+    }
+
+
 }

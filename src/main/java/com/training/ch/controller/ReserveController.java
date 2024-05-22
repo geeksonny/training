@@ -55,7 +55,7 @@ public class ReserveController {
         return "reservation/reserve";
     }
 
-    @PostMapping("reserve")
+    @PostMapping("/reserve")
     public String reservePro(Integer page, Integer pageSize, Integer eno, ReserveDto reserveDto,
                              Model m, HttpSession session,RedirectAttributes rattr){
         String id = (String)session.getAttribute("id");
@@ -100,9 +100,6 @@ public class ReserveController {
             m.addAttribute("msg", "RESERVE_ERR");
             return "reservation/reserve";
         }
-
-
-
     }
 
     @GetMapping("/equipments")
@@ -122,30 +119,8 @@ public class ReserveController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "reservation/reserveList2";
+        return "reservation/equipList";
     }
-
-    @GetMapping("/equipments/all")
-    public String getAllEquipments(@RequestParam(defaultValue = "1") int page, Model m) {
-        List<EquipmentDto> allEquipments = null;
-        try {
-            int pageSize = 8; // 페이지 크기 설정
-            SearchCondition sc = new SearchCondition(page, pageSize, "", ""); // 페이지 및 기타 조건 설정
-            int totalCnt = equipService.getSearchResultCnt(sc); // 전체 결과 수 조회
-            PageHandler pageHandler = new PageHandler(totalCnt, sc); // 페이징 처리
-            System.out.println("totalCnt = " + totalCnt);
-            allEquipments = equipService.getSearchResultPage(sc);
-            m.addAttribute("list", allEquipments);
-            m.addAttribute("ph", pageHandler);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "reservation/reserveList";
-    }
-
-
 
 
 }

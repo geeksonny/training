@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -26,13 +27,17 @@ public class BoardController {
     BoardService boardService;
 
     @GetMapping("/board")
-    public String board(){
-        return "board";
+    public String board(Model m) {
+        m.addAttribute("mode","new");
+        return "board2";
     }
 
     @PostMapping("/write")
     public String write(BoardDto boardDto, Model m, HttpSession session){
         String writer = (String)session.getAttribute("id");
+        if(writer==null){
+            return "redirect:/login/login";
+        }
         boardDto.setWriter(writer);
         try {
             int rowCnt = boardService.write(boardDto);
@@ -42,7 +47,7 @@ public class BoardController {
         } catch (Exception e) {
             e.printStackTrace();
             m.addAttribute("boardDto", boardDto);
-            return "board";
+            return "board2";
         }
 
     }
@@ -76,7 +81,7 @@ public class BoardController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "board";
+        return "board2";
     }
 
     @PostMapping("/modify")
@@ -94,7 +99,7 @@ public class BoardController {
         } catch (Exception e) {
             e.printStackTrace();
             m.addAttribute("boardDto", boardDto);
-            return "board";
+            return "board2";
         }
     }
 
@@ -107,14 +112,15 @@ public class BoardController {
 
             int rowCnt = boardService.remove(bno, writer);
 
-            if(rowCnt!=1)
+            if(rowCnt!=1) {
+                m.addAttribute("msg", "Delete Error");
                 throw new Exception("Delete Error");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "redirect:/board/list";
     }
-
 
 }
