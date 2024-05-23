@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -42,8 +43,11 @@ public class ReserveController {
     }
 
     @GetMapping("/select")
-    public String reserveDetail(Integer eno, Integer page, Integer pageSize, Model m){
+    public String reserveDetail(Integer eno, Integer page, Integer pageSize, Model m, HttpServletRequest request){
         try {
+//            if(!loginCheck(request)) {
+//                return "redirect:/login/login?toURL="+request.getRequestURL();
+//            }
             EquipmentDto equipmentDto = equipService.select(eno);
             m.addAttribute(equipmentDto);
             m.addAttribute("page", page);
@@ -120,6 +124,13 @@ public class ReserveController {
             e.printStackTrace();
         }
         return "reservation/equipList";
+    }
+
+    private boolean loginCheck(HttpServletRequest request) {
+        // 1. 세션을 얻어서
+        HttpSession session = request.getSession();
+        // 2. 세션에 id가 있는지 확인, 있으면 true를 반환
+        return session.getAttribute("id")!=null;
     }
 
 

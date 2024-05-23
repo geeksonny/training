@@ -44,7 +44,7 @@
     <select id="getSearchResultPage" parameterType="SearchCondition" resultType="EquipmentDto">
         <include refid="selectAll"/>
         WHERE TRUE
-        AND ENAME LIKE concat('%', #{keyword}, '%')
+        AND LOWER(ENAME) LIKE LOWER(concat('%', #{keyword}, '%'))
         ORDER BY ENO ASC
         LIMIT #{offset}, #{pageSize}
     </select>

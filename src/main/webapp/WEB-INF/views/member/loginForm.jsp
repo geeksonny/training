@@ -52,6 +52,7 @@
                             <i class="fa fa-exclamation-circle"> ${URLDecoder.decode(param.msg, "UTF-8")}</i>
                         </c:if>
                 </div>
+                    <input type="hidden" name="toURL" value="${param.toURL}">
                     <input type="submit" id="btn" value="로그인" ><br>
             </form>
             <div>

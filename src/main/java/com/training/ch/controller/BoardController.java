@@ -27,23 +27,20 @@ public class BoardController {
     BoardService boardService;
 
     @GetMapping("/board")
-    public String board(Model m) {
-        m.addAttribute("mode","new");
+    public String board(Model m, HttpServletRequest request) {
+        if(!loginCheck(request))
+            return "redirect:/login/login?toURL="+request.getRequestURL();
+         m.addAttribute("mode","new");
         return "board2";
     }
 
     @PostMapping("/write")
     public String write(BoardDto boardDto, Model m, HttpSession session){
         String writer = (String)session.getAttribute("id");
-        if(writer==null){
-            return "redirect:/login/login";
-        }
         boardDto.setWriter(writer);
         try {
             int rowCnt = boardService.write(boardDto);
-
             return "redirect:/board/list";
-
         } catch (Exception e) {
             e.printStackTrace();
             m.addAttribute("boardDto", boardDto);
@@ -64,6 +61,7 @@ public class BoardController {
 
             Instant startOfToday = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
             m.addAttribute("startOfToday", startOfToday.toEpochMilli());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,5 +120,15 @@ public class BoardController {
         }
         return "redirect:/board/list";
     }
+
+
+    private boolean loginCheck(HttpServletRequest request) {
+        // 1. 세션을 얻어서
+        HttpSession session = request.getSession();
+        // 2. 세션에 id가 있는지 확인, 있으면 true를 반환
+        return session.getAttribute("id")!=null;
+    }
+
+
 
 }

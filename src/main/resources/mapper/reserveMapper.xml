@@ -63,10 +63,6 @@
           AND <![CDATA[start_time < #{end_time} AND end_time > #{start_time}]]>
     </select>
 
-
-
-
-
      <!-- 유저 정보 입력 -->
     <insert id="insertReserve">
         INSERT INTO RESERVE_INFO(RNO, ID, TYPE, START_TIME, END_TIME, USE_CNT, RESERVE_STATE)
