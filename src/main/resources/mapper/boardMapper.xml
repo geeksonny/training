@@ -17,21 +17,21 @@
 
     <insert id="insert" parameterType="BoardDto">
         INSERT INTO board
-            (bno, writer, title, content)
+            (bno, writer, title, content, bfile)
         VALUES
             ((SELECT bno
               FROM (SELECT IFNULL(MAX(bno), 0) + 1 AS bno
-                    FROM board) as A), #{writer}, #{title}, #{content})
+                    FROM board) as A), #{writer}, #{title}, #{content}, #{bfile})
     </insert>
 
     <select id="selectAll" resultType="BoardDto">
-        SELECT bno, writer, title, content, view_cnt, comment_cnt, reg_date
+        SELECT bno, writer, title, content, view_cnt, comment_cnt, reg_date, bfile
         FROM board
         ORDER BY reg_date DESC, bno DESC
     </select>
 
     <sql id="selectFromBoard">
-        SELECT bno, writer, title, content, view_cnt, comment_cnt, reg_date
+        SELECT bno, writer, title, content, view_cnt, comment_cnt, reg_date, bfile
         FROM board
     </sql>
 
@@ -50,6 +50,7 @@
         UPDATE board
         SET   title = #{title}
           , content = #{content}
+          , bfile = #{bfile}
           , up_date = now()
         WHERE bno = #{bno}
     </update>
@@ -82,7 +83,7 @@
     </sql>
 
     <select id="searchSelectPage" parameterType="SearchCondition" resultType="BoardDto">
-        SELECT bno, writer, title, content, view_cnt, comment_cnt, reg_date
+        SELECT bno, writer, title, content, view_cnt, comment_cnt, reg_date, bfile
         FROM  board
         WHERE true
         <include refid="searchCondition"/>

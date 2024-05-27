@@ -12,19 +12,12 @@ public class BoardDto {
     private int comment_cnt;
     private Date reg_date;
     private Date up_date;
-
-    public BoardDto(){}
-
-    public BoardDto(String writer, String title, String content) {
-        this.writer = writer;
-        this.title = title;
-        this.content = content;
-    }
+    private String bfile;
 
     @Override
     public String toString() {
         return "BoardDto{" +
-                "bno='" + bno + '\'' +
+                "bno=" + bno +
                 ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
@@ -32,6 +25,7 @@ public class BoardDto {
                 ", comment_cnt=" + comment_cnt +
                 ", reg_date=" + reg_date +
                 ", up_date=" + up_date +
+                ", bfile='" + bfile + '\'' +
                 '}';
     }
 
@@ -40,12 +34,28 @@ public class BoardDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BoardDto boardDto = (BoardDto) o;
-        return view_cnt == boardDto.view_cnt && comment_cnt == boardDto.comment_cnt && Objects.equals(bno, boardDto.bno) && Objects.equals(writer, boardDto.writer) && Objects.equals(title, boardDto.title) && Objects.equals(content, boardDto.content) && Objects.equals(reg_date, boardDto.reg_date) && Objects.equals(up_date, boardDto.up_date);
+        return view_cnt == boardDto.view_cnt && comment_cnt == boardDto.comment_cnt && Objects.equals(bno, boardDto.bno) && Objects.equals(writer, boardDto.writer) && Objects.equals(title, boardDto.title) && Objects.equals(content, boardDto.content) && Objects.equals(reg_date, boardDto.reg_date) && Objects.equals(up_date, boardDto.up_date) && Objects.equals(bfile, boardDto.bfile);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bno, writer, title, content, view_cnt, comment_cnt, reg_date, up_date);
+        return Objects.hash(bno, writer, title, content, view_cnt, comment_cnt, reg_date, up_date, bfile);
+    }
+
+    public String getBfile() {
+        return bfile;
+    }
+
+    public void setBfile(String bfile) {
+        this.bfile = bfile;
+    }
+
+    public BoardDto(){}
+
+    public BoardDto(String writer, String title, String content) {
+        this.writer = writer;
+        this.title = title;
+        this.content = content;
     }
 
     public Integer getBno() {

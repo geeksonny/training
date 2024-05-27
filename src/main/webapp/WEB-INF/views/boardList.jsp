@@ -80,7 +80,7 @@
 
         th,
         td {
-            text-align: center;
+            text-align: center !important;
             padding: 15px 10px;
         }
 

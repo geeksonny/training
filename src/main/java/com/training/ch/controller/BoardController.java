@@ -7,17 +7,22 @@ import com.training.ch.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/board")
@@ -25,26 +30,42 @@ public class BoardController {
 
     @Autowired
     BoardService boardService;
+    @Resource(name = "uploadPath")
+    private String uploadPath;
+
+
 
     @GetMapping("/board")
     public String board(Model m, HttpServletRequest request) {
         if(!loginCheck(request))
             return "redirect:/login/login?toURL="+request.getRequestURL();
-         m.addAttribute("mode","new");
-        return "board2";
+        m.addAttribute("mode","new");
+        return "board";
     }
 
     @PostMapping("/write")
-    public String write(BoardDto boardDto, Model m, HttpSession session){
+    public String write(BoardDto boardDto, Model m, HttpSession session, MultipartFile file){
         String writer = (String)session.getAttribute("id");
         boardDto.setWriter(writer);
+        String filename = "";
         try {
+            if(file==null || file.isEmpty()){
+                filename = "dumbbell.jpg";
+            }else {
+                UUID uuid = UUID.randomUUID();
+                filename = uuid.toString()+"_"+file.getOriginalFilename();
+
+                File uploadFile = new File(uploadPath, filename);
+                FileCopyUtils.copy(file.getBytes(),uploadFile);
+            }
+            boardDto.setBfile(filename);
             int rowCnt = boardService.write(boardDto);
+
             return "redirect:/board/list";
         } catch (Exception e) {
             e.printStackTrace();
             m.addAttribute("boardDto", boardDto);
-            return "board2";
+            return "board";
         }
 
     }
@@ -79,7 +100,7 @@ public class BoardController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "board2";
+        return "board";
     }
 
     @PostMapping("/modify")
@@ -97,7 +118,7 @@ public class BoardController {
         } catch (Exception e) {
             e.printStackTrace();
             m.addAttribute("boardDto", boardDto);
-            return "board2";
+            return "board";
         }
     }
 
