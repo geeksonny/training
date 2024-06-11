@@ -35,6 +35,14 @@
 
             let copyContentToTextarea = function() {
                 $('#hiddenContent').val($('#content').html());
+
+                let imgTag = $(content).find('img');
+                let imgSrc = imgTag.attr('src');
+                let imgFileName = imgSrc ? imgSrc.substring(imgSrc.lastIndexOf('/') + 1) : '';
+                let textContent = $('#content').clone().children().remove().end().text().trim();
+
+                $('#hiddenContent').val(textContent);
+                $('#bfile').val(imgFileName);
             }
 
             $("#wrtBtn").on("click", function () {
@@ -188,6 +196,7 @@
 <form id="form" action="" method="post" enctype="multipart/form-data">
     <input type="hidden" name="bno" value="${boardDto.bno}">
     <input type="hidden" id="writer" name="writer" value="${boardDto.writer}">
+    <input type="hidden" name="bfile" id="bfile">
     <table>
         <tr>
             <th style="text-align: center">제목</th>

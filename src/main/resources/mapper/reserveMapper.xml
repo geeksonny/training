@@ -54,6 +54,7 @@
         FROM RESERVE_INFO
         WHERE TYPE = #{type}
         AND <![CDATA[start_time < #{end_time} AND end_time > #{start_time}]]>
+        AND RESERVE_STATE = 0
     </select>
 
     <select id="otherReserved" parameterType="ReserveDto" resultType="int">
@@ -77,6 +78,17 @@
                         AND ID = #{id}) as B),
                #{reserve_state})
     </insert>
+
+    <!-- 예약조건 조회  -->
+    <select id="canceledReserve" parameterType="ReserveDto" resultType="int">
+        SELECT COUNT(*)
+        FROM RESERVE_INFO
+        WHERE TYPE = #{type}
+        AND <![CDATA[start_time < #{end_time} AND end_time > #{start_time}]]>
+        AND RESERVE_STATE = 1
+    </select>
+
+
 
 
 </mapper>

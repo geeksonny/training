@@ -5,6 +5,7 @@ import com.training.ch.domain.ReserveDto;
 import java.util.List;
 
 public interface ReserveService {
+
     int getCount() throws Exception;
 
     int reserve(ReserveDto reserveDto) throws Exception;
@@ -18,4 +19,6 @@ public interface ReserveService {
     int isAlreadyReserved(ReserveDto reserveDto) throws Exception;
 
     int otherReserved(ReserveDto reserveDto) throws Exception;
+
+    int canceledReserve(ReserveDto reserveDto) throws Exception;
 }

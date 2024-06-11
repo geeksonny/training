@@ -2,6 +2,7 @@ package com.training.ch.controller;
 
 import com.training.ch.domain.*;
 import com.training.ch.service.EquipServiceImpl;
+import com.training.ch.service.ReserveService;
 import com.training.ch.service.ReserveServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ import java.util.List;
 @RequestMapping("/reserve")
 public class ReserveController {
     @Autowired
-    ReserveServiceImpl reserveService;
+    ReserveService reserveService;
     @Autowired
     EquipServiceImpl equipService;
 
@@ -45,9 +46,6 @@ public class ReserveController {
     @GetMapping("/select")
     public String reserveDetail(Integer eno, Integer page, Integer pageSize, Model m, HttpServletRequest request){
         try {
-//            if(!loginCheck(request)) {
-//                return "redirect:/login/login?toURL="+request.getRequestURL();
-//            }
             EquipmentDto equipmentDto = equipService.select(eno);
             m.addAttribute(equipmentDto);
             m.addAttribute("page", page);
@@ -76,6 +74,21 @@ public class ReserveController {
 
             // 1. 사용자가 선택한 예약 시간대에 이미 예약이 있는지 확인
             if (reserveService.isAlreadyReserved(reserveDto)>=1) {
+                if(reserveService.canceledReserve(reserveDto)>=1){
+                    synchronized (this){
+                        if(reserveService.isAlreadyReserved(reserveDto)>=1){
+                            m.addAttribute(equipmentDto);
+                            m.addAttribute("eno", eno);
+                            m.addAttribute("page",page);
+                            m.addAttribute("pageSize", pageSize);
+                            m.addAttribute("msg", "ALREADY_RESERVED");
+                            return "reservation/reserve";
+                        }
+                        reserveService.reserve(reserveDto);
+                    }
+                    rattr.addFlashAttribute("msg", "RESERVE_OK");
+                    return "redirect:/reserve/list";
+                }
                 m.addAttribute(equipmentDto);
                 m.addAttribute("eno", eno);
                 m.addAttribute("page",page);
@@ -124,13 +137,6 @@ public class ReserveController {
             e.printStackTrace();
         }
         return "reservation/equipList";
-    }
-
-    private boolean loginCheck(HttpServletRequest request) {
-        // 1. 세션을 얻어서
-        HttpSession session = request.getSession();
-        // 2. 세션에 id가 있는지 확인, 있으면 true를 반환
-        return session.getAttribute("id")!=null;
     }
 
 

@@ -59,4 +59,9 @@ public class ReserveDaoImpl implements ReserveDao {
         return session.selectOne(namespace+"otherReserved", reserveDto);
     }
 
+    @Override
+    public int canceledReserve(ReserveDto reserveDto) throws Exception{
+        return session.selectOne(namespace+"canceledReserve", reserveDto);
+    }
+
 }

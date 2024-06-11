@@ -20,4 +20,6 @@ public interface ReserveDao {
     int isAlreadyReserved(ReserveDto reserveDto) throws Exception;
 
     int otherReserved(ReserveDto reserveDto) throws Exception;
+
+    int canceledReserve(ReserveDto reserveDto) throws Exception;
 }

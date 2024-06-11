@@ -4,6 +4,7 @@ import com.training.ch.dao.ReserveDao;
 import com.training.ch.domain.ReserveDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
+    @Transactional
     public int reserve(ReserveDto reserveDto) throws Exception{
         return reserveDao.insertReserve(reserveDto);
     }
@@ -45,5 +47,9 @@ public class ReserveServiceImpl implements ReserveService {
     @Override
     public int otherReserved(ReserveDto reserveDto) throws Exception {
         return reserveDao.otherReserved(reserveDto);
+    }
+    @Override
+    public int canceledReserve(ReserveDto reserveDto) throws Exception {
+        return reserveDao.canceledReserve(reserveDto);
     }
 }
