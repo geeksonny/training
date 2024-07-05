@@ -16,14 +16,14 @@ public class CommentController {
     CommentService service;
 
     // 댓글을 수정하는 메서드
-    @PatchMapping("/comments/{cno}")   // /ch4/comments/25 PATCH
-    public ResponseEntity<String> modify(@PathVariable Integer cno, @RequestBody CommentDto dto, HttpSession session){
+    @PatchMapping("/comments/{cno}")
+    public ResponseEntity<String> modify(@PathVariable Integer cno, @RequestBody CommentDto commentDto, HttpSession session){
         String commenter=(String)session.getAttribute("id");
-        dto.setCommenter(commenter);
-        dto.setCno(cno);
+        commentDto.setCommenter(commenter);
+        commentDto.setCno(cno);
 
         try {
-            if(service.modify(dto)!=1)
+            if(service.modify(commentDto)!=1)
                 throw new Exception("Modify Failed");
 
             return new ResponseEntity<String>("MOD_OK",HttpStatus.OK);
@@ -34,17 +34,18 @@ public class CommentController {
     }
     // 댓글을 등록하는 메서드
     @PostMapping("/comments")   // /ch4/comments?bno=888 POST
-    public ResponseEntity<String> write(@RequestBody CommentDto dto, Integer bno, HttpSession session){
+    public ResponseEntity<String> write(@RequestBody CommentDto commentDto, Integer bno, HttpSession session){
         String commenter=(String)session.getAttribute("id");
-        dto.setCommenter(commenter);
-        dto.setBno(bno);
-        System.out.println("dto = " + dto);
-
         try {
-            if(service.write(dto)!=1)
+            if(commenter==null){
+                throw new Exception("WTR_ERR");
+            }
+            commentDto.setCommenter(commenter);
+            commentDto.setBno(bno);
+            if(service.write(commentDto)!=1)
                 throw new Exception("Write Failed");
 
-            return new ResponseEntity<String>("WRT_OK", HttpStatus.OK);
+        return new ResponseEntity<String>("WRT_OK", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("WRT_ERR",HttpStatus.BAD_REQUEST);
@@ -74,7 +75,6 @@ public class CommentController {
         List<CommentDto> list =  null;
         try {
             list = service.getList(bno);
-            System.out.println("list = " + list);
             return new ResponseEntity<List<CommentDto>>(list, HttpStatus.OK);    //200
         } catch (Exception e) {
             e.printStackTrace();

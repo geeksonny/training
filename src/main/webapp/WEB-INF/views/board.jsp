@@ -4,13 +4,15 @@
 <head>
     <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<c:url value='/resources/css/board.css'/>">
     <script>
         let msg = "${msg}";
         if(msg=="Delete Error")    alert("삭제에 실패했습니다. 먼저 로그인 해주세요.");
 
         $(document).ready(function () {
-            var writer = $("#writer").val();
-            var id = '<%=(String)session.getAttribute("id")%>';
+            // 게시판 작성
+            let writer = $("#writer").val();
+            let id = '<%=(String)session.getAttribute("id")%>';
             if (writer == id) {
                 $('#modBtn, #delBtn').show();
             } else {
@@ -33,9 +35,11 @@
                 return true;
             }
 
+            loadComments();
+
+            // 게시판 파일이름 분리
             let copyContentToTextarea = function() {
                 $('#hiddenContent').val($('#content').html());
-
                 let imgTag = $(content).find('img');
                 let imgSrc = imgTag.attr('src');
                 let imgFileName = imgSrc ? imgSrc.substring(imgSrc.lastIndexOf('/') + 1) : '';
@@ -45,6 +49,7 @@
                 $('#bfile').val(imgFileName);
             }
 
+            // 게시판 작성
             $("#wrtBtn").on("click", function () {
                 let form = $("#form");
                 form.attr("action", "<c:url value='/board/write'/>");
@@ -57,10 +62,11 @@
                 }
             });
 
+            // 목록 버튼
             $("#listBtn").on("click", function () {
                 location.href = "<c:url value='/board/list?page=${page}&pageSize=${pageSize}'/>";
             });
-
+            // 게시판 수정
             $("#modBtn").on("click", function () {
                 let form = $("#form");
                 let isReadonly = $("input[name=title]").attr('readonly');
@@ -81,7 +87,7 @@
                     form.submit();
                 }
             });
-
+            // 게시판 삭제
             $("#delBtn").on("click", function () {
                 if(!confirm("정말로 삭제하시겠습니까?")) return;
                 let form = $("#form");
@@ -90,100 +96,197 @@
                 form.submit();
             });
 
+
+            // 댓글 작성
+            $("#replyBtn").click(function(){
+                let comment = $("textarea[name=comment]").val();
+                let bno = $("#bno").val();
+                if(comment.trim()==''){
+                    alert("댓글을 입력해주세요.");
+                    $("textarea[name=comment]").focus();
+                    return;
+                }
+
+                $.ajax({
+                    type:'POST',
+                    url: '${pageContext.request.contextPath }/comments?bno='+bno,
+                    headers : { "content-type": "application/json"},
+                    data : JSON.stringify({bno: bno, comment: comment}),
+                    success : function(result){
+                        alert("댓글을 등록했습니다.")
+                        $("textarea[name=comment]").val('');
+                        loadComments();
+                    },
+                    error   : function(){ alert("댓글 등록에 실패했습니다.") }
+                });
+            });
+
+            // 댓글 삭제
+            $("#commentList").on("click", ".delete-btn", function() {
+                let commentItem = $(this).closest("li");
+                let cno = commentItem.attr("data-cno");
+                let bno = commentItem.attr("data-bno");
+
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: '${pageContext.request.contextPath}/comments/' + cno + '?bno=' + bno,
+                        success: function(result) {
+                            if (result === "DEL_OK") {
+                                commentItem.remove();
+                                alert("댓글이 삭제되었습니다.");
+                            } else {
+                                alert("댓글 삭제에 실패했습니다.");
+                            }
+                        },
+                        error: function() {
+                            alert("댓글 삭제 중 오류가 발생했습니다.");
+                        }
+                    });
+                }
+            });
+
+            // 댓글 답글, 수정 모달
+            let editModal = $("#editModal");
+            let replyModal = $("#replyModal");
+            let span = $(".close");
+
+            span.click(function() {
+                editModal.hide();
+                replyModal.hide();
+                $("#editCommentText").val("");
+                $("#replyCommentText").val("")
+            });
+
+            $(window).click(function(event) {
+                if ($(event.target).is(editModal)) {
+                    editModal.hide();
+                    $("#editCommentText").val("");
+                }
+                if ($(event.target).is(replyModal)) {
+                    replyModal.hide();
+                    $("#replyCommentText").val("");
+                }
+            });
+
+            // 댓글 수정 구현
+            $("#saveEditBtn").click(function() {
+                let cno = editModal.data("cno");
+                let comment = $("#editCommentText").val();
+                let bno = $("#bno").val();
+                if(comment.trim()==''){
+                    alert("댓글을 입력해주세요.");
+                    comment.focus();
+                    return;
+                }
+                $.ajax({
+                    type: 'PATCH',
+                    url: '${pageContext.request.contextPath}/comments/' + cno,
+                    headers: { "content-type": "application/json" },
+                    data: JSON.stringify({ bno: bno, comment: comment }),
+                    success: function(response) {
+                        if(response === "MOD_OK") {
+                            alert("댓글이 수정되었습니다.");
+                            loadComments();
+                            editModal.hide();
+                            $("#editCommentText").val("");
+                        } else {
+                            alert("댓글 수정에 실패했습니다.");
+                        }
+                    },
+                    error: function() {
+                        alert("댓글 수정에 실패했습니다.");
+                    }
+                });
+            });
+
+            // 답글쓰기 구현
+            $("#saveReplyBtn").click(function() {
+                let pcno = replyModal.data("pcno");
+                let comment = $("#replyCommentText").val();
+                let bno = $("#bno").val();
+
+                if(comment.trim()==''){
+                    alert("댓글을 입력해주세요.");
+                    comment.focus();
+                    return;
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '${pageContext.request.contextPath }/comments?bno='+bno,
+                    headers: { "content-type": "application/json" },
+                    data: JSON.stringify({ bno: bno, pcno: pcno, comment: comment }),
+                    success: function(response) {
+                        if(response === "WRT_OK") {
+                            alert("답글이 작성되었습니다.");
+                            loadComments();
+                            replyModal.hide();
+                            $("#replyCommentText").val("");
+                        } else {
+                            alert("답글 작성에 실패했습니다.");
+                        }
+                    },
+                    error: function() {
+                        alert("답글 작성에 실패했습니다.");
+                    }
+                });
+            });
+
+            // 댓글 목록 가져오기
+            function loadComments() {
+                let bno = $("#bno").val();
+                $.ajax({
+                    type: 'GET',
+                    url: '${pageContext.request.contextPath}/comments?bno=' + bno,
+                    success: function (result) {
+                        $("#commentList ul").empty();
+                        $.each(result, function (index, comment) {
+                            let up_date = new Date(comment.up_date).toISOString().replace('T', ' ').substr(0, 19);
+                            let replyClass = comment.pcno == comment.cno ? '' : ' reply-item';
+
+                            let commentHtml = '<li class="comment-item' + replyClass + '" data-cno="' + comment.cno + '" data-bno="' + bno + '" data-pcno="' + comment.pcno + '">' +
+
+                                '<div class="comment-header">' +
+                                '<span class="commenter">' + comment.commenter + '</span>' +
+                                '<span class="up_date">' + up_date + '</span>' +
+                                '</div>' +
+                                '<div class="comment">' + comment.comment + '</div>' +
+                                '<div class="comment-buttons">' +
+                                '<button class="comment-btn reply-btn">답글쓰기</button>' +
+                                '<button class="comment-btn edit-btn">수정</button>' +
+                                '<button class="comment-btn delete-btn">삭제</button>' +
+                                '</div></li>';
+                            $("#commentList ul").append(commentHtml);
+                        });
+
+                        // 답글 쓰기 버튼 클릭 이벤트 등록
+                        $(".reply-btn").click(function () {
+                            let commentItem = $(this).closest("li");
+                            let pcno = commentItem.data("pcno");
+                            $("#replyModal").data("pcno", pcno).show();
+                        });
+
+                        // 댓글 수정 버튼 클릭 이벤트 등록
+                        $(".edit-btn").click(function () {
+                            let commentItem = $(this).closest("li");
+                            let commentText = commentItem.find(".comment").text();
+                            let cno = commentItem.data("cno");
+
+                            $("#editCommentText").val(commentText);
+                            $("#editModal").data("cno", cno).show();
+                        });
+                    },
+                    error: function () {
+                        alert("댓글을 불러오는 데 실패했습니다.");
+                    }
+                });
+            }
+
+
+
         });
     </script>
-    <style>
-        body {
-            font-family: 'Open Sans', Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 50%;
-            margin: auto;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        th {
-            background-color: #333;
-            color: #fff;
-            width: 25%;
-            text-align: center;
-            font-weight: 700;
-        }
-
-        td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-            width: 75%;
-            font-family: 'Open Sans', Arial, sans-serif;
-            font-weight: 400;
-        }
-
-        input[type="text"], div[contenteditable] {
-            width: calc(100% - 24px);
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-            resize: none;
-            font-family: 'Open Sans', Arial, sans-serif;
-            font-size: 16px;
-        }
-
-        div[contenteditable] {
-            height: 600px;
-            overflow-y: auto;
-        }
-
-        button {
-            background-color: #555;
-            color: #fff;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 10px;
-            transition: background-color 0.3s ease;
-            font-family: 'Open Sans', Arial, sans-serif;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #333;
-        }
-
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-            margin-top: 70px;
-        }
-    </style>
     <title>게시판</title>
 </head>
 <body>
@@ -194,7 +297,7 @@
 </header>
 
 <form id="form" action="" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="bno" value="${boardDto.bno}">
+    <input type="hidden" id="bno" name="bno" value="${boardDto.bno}">
     <input type="hidden" id="writer" name="writer" value="${boardDto.writer}">
     <input type="hidden" name="bfile" id="bfile">
     <table>
@@ -240,9 +343,42 @@
         </tr>
     </table>
 </form>
-<c:if test="${mode ne 'new'}">
-    <jsp:include page="comment.jsp"/>
+<div id="commentList">
+    <ul>
+        <li>
+            <div class="commenter"></div>
+            <div class="comment"></div>
+        </li>
+    </ul>
+</div>
+<c:if test="${sessionScope.id != null}">
+    <div id="reply-writebox">
+        <strong>${sessionScope.id}</strong>
+        <div class="textarea-container">
+            <textarea name="comment" rows="5" cols="80" placeholder="댓글을 작성해주세요"></textarea>
+            <button type="button" id="replyBtn">댓글 등록</button>
+        </div>
+    </div>
 </c:if>
+
+<div id="replyModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>답글 작성</h2>
+        <textarea id="replyCommentText" rows="5" cols="80" placeholder="답글을 작성해주세요"></textarea>
+        <button id="saveReplyBtn">저장</button>
+    </div>
+</div>
+
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>댓글 수정</h2>
+        <textarea id="editCommentText" rows="5" cols="80"></textarea>
+        <button id="saveEditBtn">저장</button>
+    </div>
+</div>
+
 <jsp:include page="inc/footer.jsp"/>
 </body>
 </html>

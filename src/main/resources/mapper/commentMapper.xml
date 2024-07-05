@@ -19,9 +19,11 @@
 
     <insert id="insert" parameterType="CommentDto">
         INSERT INTO comment
-            (bno, pcno, comment, commenter, reg_date, up_date)
+            (cno, bno, pcno, comment, commenter, reg_date, up_date)
         VALUES
-            (#{bno}, #{pcno}, #{comment}, #{commenter}, now(), now())
+            ((SELECT cno
+              FROM (SELECT IFNULL(MAX(cno), 0) + 1 AS cno
+                    FROM comment) as A), #{bno}, #{pcno}, #{comment}, #{commenter}, now(), now())
     </insert>
 
     <select id="selectAll" parameterType="int" resultType="CommentDto">

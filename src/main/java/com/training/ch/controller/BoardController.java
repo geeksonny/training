@@ -34,7 +34,6 @@ public class BoardController {
     private String uploadPath;
 
 
-
     @GetMapping("/board")
     public String board(Model m, HttpServletRequest request) {
         if(!loginCheck(request))

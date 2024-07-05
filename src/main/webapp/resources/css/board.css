@@ -1,0 +1,325 @@
+body {
+    font-family: 'Open Sans', Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 30px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 50%;
+    margin: auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+th {
+    background-color: #333;
+    color: #fff;
+    width: 25%;
+    text-align: center;
+    font-weight: 700;
+}
+
+td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    width: 75%;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-weight: 400;
+}
+
+input[type="text"], div[contenteditable] {
+    width: calc(100% - 24px);
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: none;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 16px;
+}
+
+div[contenteditable] {
+    height: 600px;
+    overflow-y: auto;
+}
+
+textarea {
+    display: block;
+    width: calc(100% - 24px);
+    min-height: 17px;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: 0;
+    font-size: 16px;
+    resize: none;
+    box-sizing: border-box;
+    background: transparent;
+    overflow-wrap: break-word;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+button {
+    background-color: #555;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s ease;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 16px;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 70px;
+}
+
+.textarea-container {
+    position: relative;
+}
+
+#reply-writebox {
+    border-collapse: collapse;
+    width: 50%;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+#reply-writebox strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+#reply-writebox textarea {
+    width: calc(100% - 24px);
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: none;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 16px;
+}
+
+#reply-writebox button {
+    position: absolute;
+    right: 35px;
+    bottom: 10px;
+    background-color: #555;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 12px;
+}
+
+#reply-writebox button:hover {
+    background-color: #333;
+}
+
+#commentList {
+    width: 50%;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+#commentList ul {
+    list-style: none;
+    padding: 0;
+}
+
+#commentList li {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    position: relative;
+}
+
+#commentList .commenter {
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+#commentList .comment {
+    font-family: 'Open Sans', Arial, sans-serif;
+    font-size: 16px;
+}
+
+.comment-buttons {
+    margin-top: 10px;
+}
+
+.comment-btn {
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 3px;
+}
+
+.comment-btn:hover {
+    text-decoration: underline;
+}
+
+.up_date {
+    color: #888;
+    font-size: 12px;
+    margin-right: 20px;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    animation-name: modalopen;
+    animation-duration: 0.5s;
+}
+
+@keyframes modalopen {
+    from {opacity: 0; transform: translateY(-50px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 24px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.modal-content textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+    font-size: 16px;
+}
+
+.modal-content button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #5cb85c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.modal-content button:hover {
+    background-color: #4cae4c;
+}
+
+
+.reply {
+    margin-left: 20px;
+    padding-left: 15px;
+    border-left: 2px solid #ddd;
+    margin-top: 10px;
+}
+
+
+.comment-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+.reply-item {
+    margin-left: 20px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-left: 2px solid #ccc;
+    background-color: #f9f9f9;
+}
+.commenter {
+    font-weight: bold;
+}
+.comment-buttons {
+    margin-top: 5px;
+}
+.comment-buttons button {
+    margin-right: 5px;
+}
+.up_date {
+    margin-right: 10px;
+}
+
+.comment-header .commenter {
+    margin-right: 10px; /* commenter와 up_date 사이의 간격을 조절 */
+}

@@ -37,15 +37,3 @@
 
 
 
-<%--<c:choose>--%>
-<%--    <c:when test="${ !(empty sessionScope.id) && sessionScope.id ne 'admin'}">--%>
-<%--        <!-- sessionScope 아이디가 id에 admin이 아닐 경우 환영글 / 로그아웃 -->--%>
-<%--        <a href="${pageContext.request.contextPath }/mypage">마이페이지</a>--%>
-<%--        <a href="${pageContext.request.contextPath }/member/logout">로그아웃</a>--%>
-<%--    </c:when>--%>
-<%--    <c:otherwise>--%>
-<%--        <!-- sessionScope 아이디가 비어있는 경우 로그인 / 회원가입 -->--%>
-<%--        <a href="${pageContext.request.contextPath }/member/login">로그인</a>--%>
-<%--        <a href="${pageContext.request.contextPath }/member/join">회원가입</a>--%>
-<%--    </c:otherwise>--%>
-<%--</c:choose>--%>
