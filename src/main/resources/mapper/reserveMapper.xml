@@ -4,13 +4,13 @@
 <mapper namespace="com.training.ch.dao.reserveMapper">
 
     <sql id="selectAll">
-        SELECT RNO, ID, TYPE, STRAT_TIME, END_TIME, USE_CNT, RESERVE_STATE
+        SELECT RNO, ID, TYPE, START_TIME, END_TIME, USE_CNT, RESERVE_STATE
           FROM RESERVE_INFO
     </sql>
 
-    <select id="count" resultType="int">
+    <sql id="count">
         SELECT COUNT(*) FROM RESERVE_INFO
-    </select>
+    </sql>
 
     <!-- 유저 예약내역 전체 삭제    -->
     <delete id="deleteAll">
@@ -26,15 +26,41 @@
     </select>
 
     <!-- 유저당 예약내역 전체 조회-->
-    <select id="selectReserveIdAll" resultType="User">
+    <select id="selectReserveIdAll" resultType="ReserveDto">
         <include refid="selectAll"/>
         WHERE ID = #{id}
         ORDER BY RNO DESC
     </select>
 
+    <!-- 유저당 현재 예약내역 전체 조회-->
+    <select id="selectCurrentReserve" resultType="ReserveDto">
+        <include refid="selectAll"/>
+        WHERE ID = #{id}
+        AND RESERVE_STATE = 0
+        ORDER BY RNO DESC
+    </select>
+
+
+    <!-- 유저당 취소 예약내역 전체 조회-->
+    <select id="selectCanceledReserve" resultType="ReserveDto">
+        <include refid="selectAll"/>
+        WHERE ID = #{id}
+        AND RESERVE_STATE = 1
+        ORDER BY RNO DESC
+    </select>
+
+
+    <!-- 유저당 사용완료 내역 전체 조회-->
+    <select id="selectCompletedReserve" resultType="ReserveDto">
+        <include refid="selectAll"/>
+        WHERE ID = #{id}
+        AND RESERVE_STATE = 2
+        ORDER BY RNO DESC
+    </select>
+
 
     <!-- 전체 예약 정보 조회-->
-    <select id="selectReserveAll" resultType="User">
+    <select id="selectReserveAll" resultType="ReserveDto">
         <include refid="selectAll"/>
         ORDER BY RNO DESC
     </select>
@@ -86,6 +112,33 @@
         WHERE TYPE = #{type}
         AND <![CDATA[start_time < #{end_time} AND end_time > #{start_time}]]>
         AND RESERVE_STATE = 1
+    </select>
+
+    <!-- 현재 예약 내역수 조회  -->
+    <select id="countReserve" resultType="int">
+        <include refid="count" />
+        WHERE ID = #{id}
+        AND RESERVE_STATE = 0
+    </select>
+
+    <!-- 예약 취소수 조회  -->
+    <select id="countCanceledReserve" resultType="int">
+        <include refid="count" />
+        WHERE ID = #{id}
+        AND RESERVE_STATE = 1
+    </select>
+
+    <!-- 사용완료 내역수 조회  -->
+    <select id="countCompletedReserve" resultType="int">
+        <include refid="count" />
+        WHERE ID = #{id}
+        AND RESERVE_STATE = 2
+    </select>
+
+    <!-- 총예약수 조회  -->
+    <select id="countReservation" resultType="int">
+        <include refid="count" />
+        WHERE ID = #{id}
     </select>
 
 

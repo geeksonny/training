@@ -62,4 +62,10 @@ public class BoardServiceImpl implements BoardService {
     public List<BoardDto> getSearchResultPage(SearchCondition sc) throws Exception {
         return boardDao.searchSelectPage(sc);
     }
+
+    @Override
+    public int countWrite(Map map) throws Exception{
+        return boardDao.countWrite(map);
+    }
+
 }

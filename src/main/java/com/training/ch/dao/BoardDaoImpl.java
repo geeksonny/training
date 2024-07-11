@@ -22,7 +22,7 @@ public class BoardDaoImpl implements BoardDao {
     }
 
     @Override
-    public int deleteAll() {
+    public int deleteAll() throws Exception {
         return session.delete(namespace+"deleteAll");
     }
 
@@ -75,11 +75,15 @@ public class BoardDaoImpl implements BoardDao {
     }
 
     @Override
-    public int updateCommentCnt(Integer bno, int cnt) {
+    public int updateCommentCnt(Integer bno, int cnt) throws Exception {
         Map map = new HashMap();
         map.put("cnt", cnt);
         map.put("bno", bno);
         return session.update(namespace+"updateCommentCnt", map);
     }
 
+    @Override
+    public int countWrite(Map map) throws Exception{
+        return session.selectOne(namespace+"countWrite", map);
+    }
 }

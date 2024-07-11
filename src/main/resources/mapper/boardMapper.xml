@@ -3,16 +3,21 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.training.ch.dao.boardMapper">
 
+    <sql id="selectFromBoard">
+        SELECT bno, writer, title, content, view_cnt, comment_cnt, reg_date, bfile
+        FROM BOARD
+    </sql>
+
     <select id="count" resultType="int">
-        SELECT count(*) FROM board
+        SELECT count(*) FROM BOARD
     </select>
 
     <delete id="deleteAll">
-        DELETE FROM board
+        DELETE FROM BOARD
     </delete>
 
     <delete id="delete" parameterType="map">
-        DELETE FROM board WHERE bno = #{bno} and writer = #{writer}
+        DELETE FROM BOARD WHERE bno = #{bno} and writer = #{writer}
     </delete>
 
     <insert id="insert" parameterType="BoardDto">
@@ -26,28 +31,17 @@
 
     <select id="selectAll" resultType="BoardDto">
         SELECT bno, writer, title, content, view_cnt, comment_cnt, reg_date, bfile
-        FROM board
+        FROM BOARD
         ORDER BY reg_date DESC, bno DESC
     </select>
-
-    <sql id="selectFromBoard">
-        SELECT bno, writer, title, content, view_cnt, comment_cnt, reg_date, bfile
-        FROM board
-    </sql>
 
     <select id="select" parameterType="int" resultType="BoardDto">
         <include refid="selectFromBoard"/>
         WHERE bno = #{bno}
     </select>
 
-    <select id="selectPage" parameterType="map" resultType="BoardDto">
-        <include refid="selectFromBoard"/>
-        ORDER BY reg_date DESC, bno DESC
-        LIMIT #{offset}, #{pageSize}
-    </select>
-
     <update id="update" parameterType="BoardDto">
-        UPDATE board
+        UPDATE BOARD
         SET   title = #{title}
           , content = #{content}
           , bfile = #{bfile}
@@ -56,13 +50,13 @@
     </update>
 
     <update id="updateCommentCnt" parameterType="map">
-        UPDATE board
+        UPDATE BOARD
         SET   comment_cnt = comment_cnt + #{cnt}
         WHERE bno = #{bno}
     </update>
 
     <update id="increaseViewCnt" parameterType="int">
-        UPDATE board
+        UPDATE BOARD
         SET   view_cnt = view_cnt + 1
         WHERE bno = #{bno}
     </update>
@@ -92,11 +86,25 @@
     </select>
 
     <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
-        SELECT count(*)
-        FROM  board
+        SELECT COUNT(*)
+        FROM  BOARD
         WHERE true
         <include refid="searchCondition"/>
     </select>
 
 
+    <select id="countWrite" resultType="int">
+        SELECT COUNT(*)
+        FROM BOARD
+        WHERE writer = #{writer}
+        <include refid="searchCondition"/>
+    </select>
+
+    <select id="selectPage" resultType="BoardDto">
+        <include refid="selectFromBoard"/>
+        WHERE writer = #{writer}
+        <include refid="searchCondition"/>
+        ORDER BY reg_date DESC, bno DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
 </mapper>

@@ -19,4 +19,8 @@ public interface CommentService {
     CommentDto read(Integer cno) throws Exception;
 
     int modify(CommentDto commentDto) throws Exception;
+
+    List<CommentDto> getList(String commenter) throws Exception;
+
+    int countComment(String commenter) throws Exception;
 }

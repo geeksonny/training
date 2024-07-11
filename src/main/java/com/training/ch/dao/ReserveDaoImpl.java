@@ -16,11 +16,6 @@ public class ReserveDaoImpl implements ReserveDao {
     private static String namespace ="com.training.ch.dao.reserveMapper.";
 
     @Override
-    public int count() throws Exception{
-        return session.selectOne(namespace+"count");
-    }
-
-    @Override
     public int insertReserve(ReserveDto reserveDto) throws Exception{
         return session.insert(namespace+"insertReserve", reserveDto);
     }
@@ -63,5 +58,41 @@ public class ReserveDaoImpl implements ReserveDao {
     public int canceledReserve(ReserveDto reserveDto) throws Exception{
         return session.selectOne(namespace+"canceledReserve", reserveDto);
     }
+
+    @Override
+    public int countReserve(String id) throws Exception{
+        return session.selectOne(namespace+"countReserve", id);
+    }
+
+    @Override
+    public int countCanceledReserve(String id) throws Exception{
+        return session.selectOne(namespace+"countCanceledReserve", id);
+    }
+
+    @Override
+    public int countCompletedReserve(String id) throws Exception{
+        return session.selectOne(namespace+"countCompletedReserve", id);
+    }
+
+    @Override
+    public int countReservation(String id) throws Exception{
+        return session.selectOne(namespace+"countReservation", id);
+    }
+
+    @Override
+    public List<ReserveDto> selectCurrentReserve(String id) throws Exception{
+        return session.selectList(namespace+"selectCurrentReserve", id);
+    }
+
+    @Override
+    public List<ReserveDto> selectCanceledReserve(String id) throws Exception{
+        return session.selectList(namespace+"selectCanceledReserve", id);
+    }
+
+    @Override
+    public List<ReserveDto> selectCompletedReserve(String id) throws Exception{
+        return session.selectList(namespace+"selectCompletedReserve", id);
+    }
+
 
 }

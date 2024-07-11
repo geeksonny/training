@@ -9,7 +9,7 @@ import java.util.Map;
 public interface BoardDao {
     int count() throws Exception;
 
-    int deleteAll();
+    int deleteAll() throws Exception;
 
     int delete(Integer bno, String writer) throws Exception;
 
@@ -29,5 +29,7 @@ public interface BoardDao {
 
     List<BoardDto> searchSelectPage(SearchCondition sc) throws Exception;
 
-    int updateCommentCnt(Integer bno, int cnt);
+    int updateCommentCnt(Integer bno, int cnt) throws Exception;
+
+    int countWrite(Map map) throws Exception;
 }

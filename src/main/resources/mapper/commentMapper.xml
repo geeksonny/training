@@ -46,4 +46,18 @@
         WHERE cno = #{cno} and commenter = #{commenter}
     </update>
 
+
+    <select id="selectCommenter" resultType="CommentDto">
+        SELECT cno, bno, pcno, comment, commenter, reg_date, up_date
+        FROM comment
+        WHERE commenter = #{commenter}
+        ORDER BY pcno asc, cno asc
+    </select>
+
+    <select id="countComment" resultType="int">
+        SELECT COUNT(*)
+        FROM comment
+        WHERE commenter = #{commenter}
+    </select>
+
 </mapper>

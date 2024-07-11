@@ -52,4 +52,17 @@ public class CommentDaoImpl implements CommentDao {
     public int update(CommentDto commentDto) throws Exception {
         return session.update(namespace+"update", commentDto);
     }
+
+    @Override
+    public List<CommentDto> getList(String commenter) throws Exception{
+        return session.selectList(namespace+"selectCommenter", commenter);
+    }
+
+    @Override
+    public int countComment(String commenter) throws Exception{
+        return session.selectOne(namespace+"countComment", commenter);
+    }
+
+
+
 }

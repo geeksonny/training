@@ -57,4 +57,14 @@ public class CommentServiceImpl implements CommentService {
     public int modify(CommentDto commentDto) throws Exception {
         return commentDao.update(commentDto);
     }
+
+    @Override
+    public List<CommentDto> getList(String commenter) throws Exception{
+        return commentDao.getList(commenter);
+    }
+
+    @Override
+    public int countComment(String commenter) throws Exception{
+        return commentDao.countComment(commenter);
+    }
 }

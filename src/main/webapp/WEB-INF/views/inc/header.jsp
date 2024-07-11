@@ -27,7 +27,16 @@
             </ul>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end" >
-                <div class="loginIdCheck" style="font-weight: bold; font-size: 18px; padding-right: 10px; padding-top: 5px;">${loginId}</div>
+                <div class="loginIdCheck" style="font-weight: bold; font-size: 18px; padding-right: 10px; padding-top: 5px;">
+                   <c:choose>
+                       <c:when test="${sessionScope.id eq 'admin'}">
+                           <a href="<c:url value='/mypage/admin'/>">${loginId}</a>
+                       </c:when>
+                       <c:otherwise>
+                           <a href="<c:url value='/mypage/'/>">${loginId}</a>
+                       </c:otherwise>
+                   </c:choose>
+                </div>
                 <a href="<c:url value='${loginOutLink}'/>"><button type="button" class="btn btn-outline-light me-2">${loginOut}</button></a>
                 <a href="<c:url value='/register/add'/>"><button type="button" class="btn btn-warning">Sign-up</button></a>
             </div>
