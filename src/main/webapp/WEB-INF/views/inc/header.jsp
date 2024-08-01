@@ -23,7 +23,6 @@
                 <li><a href="<c:url value='/'/>" class="nav-link px-2 text-secondary">Home</a></li>
                 <li><a href="<c:url value='/reserve/list'/>" class="nav-link px-2 text-secondary">Reservation</a></li>
                 <li><a href="<c:url value='/board/list'/>" class="nav-link px-2 text-white">Board</a></li>
-                <li><a href="#" class="nav-link px-2 text-white">Q&A</a></li>
             </ul>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end" >

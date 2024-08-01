@@ -30,8 +30,13 @@ public class ReserveServiceImpl implements ReserveService {
     }
 
     @Override
-    public int cancelUseCnt(int rno, String type, int reserve_state) throws Exception{
-        return reserveDao.cancelUseCnt(rno, type, reserve_state);
+    public int cancelUseCnt(int rno, String type) throws Exception{
+        return reserveDao.cancelUseCnt(rno, type);
+    }
+
+    @Override
+    public int completeUse(int rno, String type) throws Exception{
+        return reserveDao.completeUse(rno, type);
     }
 
     @Override

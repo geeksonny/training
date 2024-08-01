@@ -135,6 +135,7 @@
                             if (result === "DEL_OK") {
                                 commentItem.remove();
                                 alert("댓글이 삭제되었습니다.");
+                                loadComments();
                             } else {
                                 alert("댓글 삭제에 실패했습니다.");
                             }
@@ -241,6 +242,11 @@
                     url: '${pageContext.request.contextPath}/comments?bno=' + bno,
                     success: function (result) {
                         $("#commentList ul").empty();
+                        if (result.length > 0) {
+                            $("#commentList").show();
+                        } else {
+                            $("#commentList").hide();
+                        }
                         $.each(result, function (index, comment) {
                             let up_date = new Date(comment.up_date).toISOString().replace('T', ' ').substr(0, 19);
                             let replyClass = comment.pcno == comment.cno ? '' : ' reply-item';
@@ -343,7 +349,8 @@
         </tr>
     </table>
 </form>
-<div id="commentList">
+
+<div id="commentList" style="display: none;">
     <ul>
         <li>
             <div class="commenter"></div>

@@ -65,11 +65,19 @@
         ORDER BY RNO DESC
     </select>
 
+    <!-- 사용 완료 -->
+    <update id="completeUse" parameterType="map">
+        UPDATE RESERVE_INFO
+        SET    RESERVE_STATE = 2
+        WHERE  RNO = #{rno}
+        AND    TYPE = #{type}
+    </update>
+
 
     <!-- 예약 취소 -->
     <update id="cancelUseCnt" parameterType="map">
         UPDATE RESERVE_INFO
-        SET    USE_CNT = USE_CNT - 1, RESERVE_STATE = #{reserve_state}
+        SET    USE_CNT = USE_CNT - 1, RESERVE_STATE = 1
         WHERE  RNO = #{rno}
         and TYPE = #{type}
     </update>

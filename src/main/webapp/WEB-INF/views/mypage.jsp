@@ -10,7 +10,12 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <style>
-        /* 컨텐츠 영역 */
+        .wrapper {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: row;
+        }
+
         .main-content {
             padding: 20px;
         }
@@ -45,6 +50,43 @@
                 // 기본 탭 활성화
                 $(".sidebar a:first").click();
             }
+
+            // 사용 완료 버튼 클릭 이벤트
+            $(document).on('click', '#completeBtn', function() {
+                let rno = $(this).data('rno');
+                let type = $(this).data('type');
+                $.ajax({
+                    url: '<c:url value="/reserve/complete"/>',
+                    type: 'POST',
+                    data: { rno: rno, type: type },
+                    success: function(response) {
+                        alert('예약이 사용 완료로 처리되었습니다.');
+                        location.reload();
+                    },
+                    error: function() {
+                        alert('처리 중 오류가 발생했습니다.');
+                    }
+                });
+            });
+
+            // 예약 취소 버튼 클릭 이벤트
+            $(document).on('click', '#canceledBtn', function() {
+                let rno = $(this).data('rno');
+                let type = $(this).data('type');
+                $.ajax({
+                    url: '<c:url value="/reserve/cancel"/>',
+                    type: 'POST',
+                    data: { rno: rno, type: type },
+                    success: function(response) {
+                        alert('예약이 취소되었습니다.');
+                        location.reload();
+                    },
+                    error: function() {
+                        alert('처리 중 오류가 발생했습니다.');
+                    }
+                });
+            });
+
         });
     </script>
 </head>
@@ -104,7 +146,9 @@
                                                     <h5 class="card-title">${reserveDto.type}</h5>
                                                     <p class="card-text">예약 시간: <fmt:formatDate value="${reserveDto.start_time}" pattern="yyyy-MM-dd HH:mm" type="date"/> ~ <fmt:formatDate value="${reserveDto.end_time}" pattern="yyyy-MM-dd HH:mm" type="date"/></p>
                                                     <c:if test="${reserveDto.reserve_state eq 0}">
-                                                    <p class="card-text">상태: 예약 완료</p> <input type="button" value="사용 완료" id="completeBtn"> <input type="button" value="예약 취소" id="canceledBtn">
+                                                        <p class="card-text">상태: 예약 완료</p>
+                                                        <input type="button" value="사용 완료" id="completeBtn" data-rno="${reserveDto.rno}" data-type="${reserveDto.type}">
+                                                        <input type="button" value="예약 취소" id="canceledBtn" data-rno="${reserveDto.rno}" data-type="${reserveDto.type}">
                                                     </c:if>
                                                 </div>
                                             </div>
@@ -343,11 +387,45 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h2>나의 댓글</h2>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <th>번호</th>
+                                                    <th>내용</th>
+                                                    <th>작성일</th>
+                                                    <th>글</th>
+                                                    <th>수정</th>
+                                                    <th>삭제</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <c:forEach var="comment" items="${myComments}">
+                                                    <tr>
+                                                        <td>${comment.id}</td>
+                                                        <td>${comment.content}</td>
+                                                        <td><fmt:formatDate value="${comment.created_at}" pattern="yyyy-MM-dd HH:mm" /></td>
+                                                        <td><a href="<c:url value='/post/${comment.post_id}'/>">${comment.post_title}</a></td>
+                                                        <td><a href="<c:url value='/comment/edit/${comment.id}'/>" class="btn btn-primary btn-sm">수정</a></td>
+                                                        <td><a href="<c:url value='/comment/delete/${comment.id}'/>" class="btn btn-danger btn-sm" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a></td>
+                                                    </tr>
+                                                </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- 나의 정보 -->
         <div class="content" id="my-info">
             <div class="container-xxl flex-grow-1 container-p-y">

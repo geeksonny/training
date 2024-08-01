@@ -121,7 +121,6 @@ public class ReserveController {
 
     @GetMapping("/equipments")
     public String getEquipmentsByCategory(Integer eCategory, @RequestParam(defaultValue = "1") int page, Model m) {
-        // 카테고리에 따른 기구 목록을 가져오는 서비스 호출
         List<EquipmentDto> equipments = null;
         try {
             int pageSize = 8;
@@ -139,5 +138,25 @@ public class ReserveController {
         return "reservation/equipList";
     }
 
+
+    @PostMapping("/cancel")
+    public String cancel(Integer rno, String type){
+        try {
+            reserveService.cancelUseCnt(rno, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "mypage";
+    }
+
+    @PostMapping("/complete")
+    public String complete(Integer rno, String type){
+        try {
+            reserveService.completeUse(rno, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "mypage";
+    }
 
 }

@@ -12,7 +12,9 @@ public interface ReserveService {
 
     List<ReserveDto> selectReserveIdAll(String id) throws Exception;
 
-    int cancelUseCnt(int rno, String type, int reserve_state) throws Exception;
+    int cancelUseCnt(int rno, String type) throws Exception;
+
+    int completeUse(int rno, String type) throws Exception;
 
     int isAlreadyReserved(ReserveDto reserveDto) throws Exception;
 

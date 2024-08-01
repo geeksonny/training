@@ -17,7 +17,7 @@ public class ReserveDto {
     private Date end_time;   // 예약 종료 시간
 
     private int use_cnt;     // 이용횟수
-    private int reserve_state; // 0: 예약완료 1: 예약취소 2:사용완료
+    private int reserve_state; // 0: 예약완료 1: 예약취소  2:사용완료
 
     @Override
     public String toString() {

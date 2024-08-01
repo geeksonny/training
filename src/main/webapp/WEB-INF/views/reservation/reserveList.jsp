@@ -92,7 +92,7 @@
         }
 
         .card-footer {
-            flex-shrink: 0;
+            flex-shrink: 0.
         }
 
         .category-button {
@@ -106,31 +106,56 @@
             border: none;
             cursor: pointer;
             width: 100%;
-            text-align: left;
+            text-align: left.
         }
 
         .category-button:hover {
-            background-color: #e9ecef;
+            background-color: #e9ecef.
         }
 
         .fixed-sidebar {
             position: fixed;
-            left: 3%;
+            left: 1%;
             overflow-y: auto;
             z-index: 1000;
             background-color: #fff;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 300px;   /* 사이드바 최대 너비 조정 */
-            width: 25%;         /* 사이드바 기본 너비 조정 */
+            max-width: 300px;
+            width: 25%;
         }
 
         .main-content {
             margin-left: 10%;
             padding: 20px;
-            margin-bottom: 100px;
         }
 
+        /* 반응형 스타일 */
+        @media (max-width: 1200px) {
+            .fixed-sidebar {
+                position: relative;
+                width: 100%;
+                max-width: 100%;
+                margin-bottom: 20px;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .card-img-top {
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .shop__sidebar__categories a,
+            .category-button {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -182,8 +207,7 @@
 <!-- Fixed sidebar end -->
 
 <!-- Main content -->
-<!-- Main content -->
-<div class="main-content py-5" >
+<div class="main-content py-5">
     <section>
         <div class="container px-4 px-lg-5">
             <div class="row gx-5 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
@@ -193,7 +217,7 @@
                         <div class="card h-100">
                             <!-- Product image-->
                             <img class="card-img-top" src="${pageContext.request.contextPath}/resources/img/equip/${list.eMainimg}" alt="..." />
-                            <input type="hidden" name="eno" value="${list.eno}}">
+                            <input type="hidden" name="eno" value="${list.eno}">
                             <!-- Product details-->
                             <div class="card-body p-4">
                                 <div class="text-center">
@@ -244,8 +268,5 @@
     </div>
     <!-- Paging container end -->
 </div>
-
-
-
 </body>
 </html>

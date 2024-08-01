@@ -36,13 +36,21 @@ public class ReserveDaoImpl implements ReserveDao {
     }
 
     @Override
-    public int cancelUseCnt(int rno, String type, int reserve_state) throws Exception{
+    public int cancelUseCnt(int rno, String type) throws Exception{
         Map map = new HashMap();
         map.put("rno", rno);
         map.put("type", type);
-        map.put("reserve_state", reserve_state);
         return session.update(namespace+"cancelUseCnt", map);
     }
+
+    @Override
+    public int completeUse(int rno, String type) throws Exception{
+        Map map = new HashMap();
+        map.put("rno", rno);
+        map.put("type", type);
+        return session.update(namespace+"completeUse", map);
+    }
+
 
     @Override
     public int isAlreadyReserved(ReserveDto reserveDto) throws Exception{
